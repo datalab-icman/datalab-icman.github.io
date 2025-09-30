@@ -74,8 +74,12 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="stylesheet" href="site_libs/quarto-contrib/quarto-project/styles_home.css">
 <meta property="og:title" content="Data Lab ICMAN">
+<meta property="og:image" content="https://datalab-icman.github.io/files/ICMANLOGO.png">
 <meta property="og:site_name" content="Data Lab ICMAN">
 <meta property="og:locale" content="es_ES">
+<meta property="og:image:alt" content="Descripción de Imagen 1">
+<meta property="og:image:height" content="754">
+<meta property="og:image:width" content="1986">
 </head>
 
 <body class="nav-fixed fullcontent quarto-light">
@@ -141,17 +145,8 @@ ul.task-list li input[type="checkbox"] {
 
 <style>
   body {
-    /* Nuevo color de fondo */
     background-color: #170C3A; 
-    
-    /* Propiedades de fondo eliminadas para ser más limpio (ya que no hay imagen) */
-    /* background-size: cover; */
-    /* background-position: center; */
-    /* background-attachment: fixed; */
-
-    /* Color de texto del cuerpo cambiado a blanco para legibilidad */
     color: #FFFFFF; 
-    
     text-align: justify;
     margin: 0;
     min-height: 100vh;
@@ -188,10 +183,53 @@ ul.task-list li input[type="checkbox"] {
     margin-top: 0;
     margin-bottom: 20px;
   }
-
-  .main-text {
-    margin-top: 30px;
+  
+  /* --- Estilos para las Imágenes --- */
+  .image-links-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Alinea verticalmente las imágenes si tienen alturas diferentes */
+    gap: 30px;
+    margin-top: 40px;
+    margin-bottom: 50px;
+    padding: 0 20px;
+    flex-wrap: wrap; /* Permite que las imágenes se reorganicen en pantallas pequeñas */
   }
+
+  .home-image-link {
+    display: block;
+    text-decoration: none;
+  }
+
+  /* Estilos COMUNES para todas las imágenes */
+  .home-image {
+    object-fit: cover;
+    <!-- border-radius: 10px; -->
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease-in-out;
+    <!-- border: 3px solid #FB9E07; -->
+  }
+
+  .home-image:hover {
+    transform: translateY(-5px) scale(1.02);
+  }
+
+  /* Estilos INDIVIDUALES para cada imagen (¡Aquí controlas el tamaño!) */
+  #home-image-1 {
+    width: 495px;
+    height: 130px;
+  }
+
+  #home-image-2 {
+    width: 410px;
+    height: 100px;
+  }
+
+  #home-image-3 {
+    width: 420px;
+    height: 100px;
+  }
+
 </style>
 
 <div id="particles-js"></div>
@@ -203,6 +241,25 @@ ul.task-list li input[type="checkbox"] {
   <div class="subtitle">
     Management, analysis, and computational modeling of multi-source marine and ecological datasets
   </div>
+
+  <!-- INICIO: Contenedor de las 3 imágenes con enlaces -->
+  <div class="image-links-container">
+    
+    <a href="https://www.icman.csic.es/" target="_blank" class="home-image-link" title="Ir a ICMAN">
+      <img src="files/ICMANLOGO.png" alt="Descripción de Imagen 1" class="home-image" id="home-image-1">
+    </a>
+
+    <a href="https://www.csic.es/" target="_blank" class="home-image-link" title="Ir a CSIC">
+      <img src="files/CSIC-LOGO-sin-area-seguridad.png" alt="Descripción de Imagen 2" class="home-image" id="home-image-2">
+    </a>
+
+    <a href="https://www.ciencia.gob.es/" target="_blank" class="home-image-link" title="Ir a Web 3">
+      <img src="files/Web-Gob-Min-PNG-RGB-300ppp-1.png" alt="Descripción de Imagen 3" class="home-image" id="home-image-3">
+    </a>
+
+  </div>
+  <!-- FIN: Contenedor de las 3 imágenes con enlaces -->
+  
 </div>
 
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
@@ -249,15 +306,14 @@ const particlesConfig = {
 // Inicializar particles.js
 particlesJS('particles-js', particlesConfig);
 
-// Variable para controlar si podemos hacer clic
 let canClick = true;
 
-// Función para manejar el clic
 document.addEventListener("click", function(event) {
   if (!canClick) return;
   canClick = false;
   
-  const pJSDom = window.pJSDom?.[0];
+  // LÍNEA CORREGIDA: Se cambia "?." por "?.[0]"
+  const pJSDom = window.pJSDom?.[0]; 
   if (!pJSDom) return;
   
   const particles = pJSDom.pJS.particles.array;
