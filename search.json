@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Data Lab ICMAN",
+    "section": "",
+    "text": "Data Lab ICMAN\n  \n  \n    Management, analysis, and computational modeling of multi-source marine and ecological datasets"
+  },
+  {
+    "objectID": "contact/index.html",
+    "href": "contact/index.html",
+    "title": "Contact",
+    "section": "",
+    "text": "Data Lab ICMAN\n    Data Lab ICMAN\n    Instituto de Ciencias Marinas de Andalucía\n    Consejo Superior de Investigaciones Científicas\n  \n\n  \n      \n        \n        \n      \n          \n              Campus Universitario de Puerto Real\n              Avda. República Saharaui S/N\n              Puerto Real, E-11519, CÁDIZ\n              SPAIN\n          \n      \n    \n\n    \n    \n      \n        \n        \n      \n        datalab.icman@csic.es\n      \n    \n\n    \n    \n      \n        \n        \n      \n        +34956832612"
+  },
+  {
+    "objectID": "about/index.html",
+    "href": "about/index.html",
+    "title": "Goals of the lab",
+    "section": "",
+    "text": "Any persisting collection of agents that interact with each other and feedback on their environment face the same problem: how to cope with fluctuations while maintaining long-term integrity. This is true whether the collection of agents refers to stem cells undergoing differentiation during development, species coexisting in an ecosystem, or traders maximizing profit in future markets. I call these ecologies. I try to escape the curse of reification, and value substance over form.  This lab focuses on:\n\nTransiency: How systems avoid vanishing away while flowing in a permanently transient state.\nFeedback loops: How interactions between agents and their environment shape persistence.\nRobustness: The ability of systems to mantain integrity amisdt fluctuations.\n\nIf you want a motto for the lab, keep this in mind:\n\n\n    Everything is moving"
+  },
+  {
+    "objectID": "mission/index.html",
+    "href": "mission/index.html",
+    "title": "Mission of the Data Lab ICMAN",
+    "section": "",
+    "text": "The Data Lab ICMAN is a Scientific-Technological Core Facility specializing in the end-to-end management, analysis, and computational modeling of multi-source marine and ecological datasets. The platform will deliver state-of-the-art computational capabilities, encompassing high-performance data processing, multi-purpose statistical methodologies, and predictive numerical simulation, specifically tailored for research and innovation initiatives.\nIts goal is to accelerate the leveraging of observational and experimental datasets and computational models through reproducible worflows using open-source mathematical and statistical sources, establishing them as the foundational asset for marine science addressing the most pressing global change dynamics."
+  }
+]
