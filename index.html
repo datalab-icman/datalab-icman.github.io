@@ -77,7 +77,7 @@ ul.task-list li input[type="checkbox"] {
 <meta property="og:image" content="https://datalab-icman.github.io/files/ICMANLOGO.png">
 <meta property="og:site_name" content="Data Lab ICMAN">
 <meta property="og:locale" content="es_ES">
-<meta property="og:image:alt" content="Descripción de Imagen 1">
+<meta property="og:image:alt" content="Image 1 Description">
 <meta property="og:image:height" content="754">
 <meta property="og:image:width" content="1986">
 </head>
@@ -148,6 +148,10 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">GitHub</span></a>
   </li>  
         <li>
+    <a class="dropdown-item" href="https://git.csic.es/csic_datalab-icman" target="_blank">
+ <span class="dropdown-text">GitLab</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="https://digital.csic.es/" target="_blank">
  <span class="dropdown-text">DIGITAL.CSIC</span></a>
   </li>  
@@ -176,8 +180,16 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text"><iconify-icon inline="" icon="ph:butterfly-bold" style="font-size: 1.2em;" aria-label="Icon butterfly-bold from ph Iconify.design set." title="Bluesky"></iconify-icon></span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://git.csic.es/csic_datalab-icman" rel="me"> 
+    <a class="nav-link" href="https://github.com/datalab-icman" rel="me"> 
 <span class="menu-text"><iconify-icon inline="" icon="bi:github" style="font-size: 1.1em;" aria-label="Icon github from bi Iconify.design set." title="GitHub"></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://git.csic.es/csic_datalab-icman" rel="me"> 
+<span class="menu-text"><iconify-icon inline="" icon="bi:gitlab" style="font-size: 1.1em;" aria-label="Icon gitlab from bi Iconify.design set." title="GitLab"></iconify-icon></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://es.linkedin.com/company/instituto-de-ciencias-marinas-de-andalucía-icman-csic" rel="me"> 
+<span class="menu-text"><iconify-icon inline="" icon="bi:linkedin" style="font-size: 1.1em;" aria-label="Icon linkedin from bi Iconify.design set." title="LinkedIn"></iconify-icon></span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -206,7 +218,7 @@ ul.task-list li input[type="checkbox"] {
     min-height: 100vh;
   }
 
-  /* Contenedor de partículas */
+  /* Particle Container */
   #particles-js {
     position: fixed;
     width: 100%;
@@ -217,7 +229,7 @@ ul.task-list li input[type="checkbox"] {
     pointer-events: none;
   }
 
-  /* Contenedor principal para el contenido */
+  /* Main container for content */
   .content-wrapper {
     position: relative;
     z-index: 2;
@@ -238,36 +250,36 @@ ul.task-list li input[type="checkbox"] {
     margin-bottom: 20px;
   }
   
-  /* --- NUEVO ESTILO PARA EL PÁRRAFO INTRODUCTORIO --- */
+  /* --- NEW STYLE FOR INTRODUCTORY PARAGRAPH --- */
   .intro-paragraph {
-    max-width: 900px; /* Limita el ancho para mejor legibilidad */
-    margin: 30px auto 40px auto; /* Centra el bloque y añade espacio vertical */
-    padding: 0 20px; /* Espacio a los lados para que no toque los bordes */
+    max-width: 900px; /* Limits width for better readability */
+    margin: 30px auto 40px auto; /* Centers the block and adds vertical space */
+    padding: 0 20px; /* Space on the sides so it doesn't touch the edges */
     font-size: 1.1rem;
     line-height: 1.6;
   }
   
-  /* --- Estilo para enlaces en el párrafo --- */
+  /* --- Style for links in the paragraph --- */
   .intro-paragraph a {
-    color: #FB9E07; /* Un color que resalte, como el de las partículas */
-    text-decoration: underline; /* Subrayado para que sea obvio que es un enlace */
+    color: #FB9E07; /* A color that stands out, like the particles' color */
+    text-decoration: underline; /* Underline to make it obvious it's a link */
     transition: color 0.2s;
   }
 
   .intro-paragraph a:hover {
-    color: #FFFFFF; /* Cambia a blanco al pasar el ratón */
+    color: #FFFFFF; /* Changes to white on hover */
   }
   
-  /* --- Estilos para las Imágenes --- */
+  /* --- Styles for Images --- */
   .image-links-container {
     display: flex;
     justify-content: center;
-    align-items: center; /* Alinea verticalmente las imágenes si tienen alturas diferentes */
+    align-items: center; /* Vertically aligns images if they have different heights */
     gap: 30px;
     margin-top: 40px;
     margin-bottom: 50px;
     padding: 0 20px;
-    flex-wrap: wrap; /* Permite que las imágenes se reorganicen en pantallas pequeñas */
+    flex-wrap: wrap; /* Allows images to re-arrange on small screens */
   }
 
   .home-image-link {
@@ -275,20 +287,18 @@ ul.task-list li input[type="checkbox"] {
     text-decoration: none;
   }
 
-  /* Estilos COMUNES para todas las imágenes */
+  /* COMMON Styles for all images */
   .home-image {
     object-fit: cover;
-    <!-- border-radius: 10px; -->
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s ease-in-out;
-    <!-- border: 3px solid #FB9E07; -->
-  }
+      }
 
   .home-image:hover {
     transform: translateY(-5px) scale(1.02);
   }
 
-  /* Estilos INDIVIDUALES para cada imagen (¡Aquí controlas el tamaño!) */
+  /* INDIVIDUAL Styles for each image (Here you control the size!) */
   #home-image-1 {
     width: 495px;
     height: 130px;
@@ -320,24 +330,22 @@ ul.task-list li input[type="checkbox"] {
     The <a href="https://datalab-icman.github.io/">Data Lab ICMAN</a> is a <a href="https://www.csic.es/es/investigacion/infraestructuras-y-servicios-cientifico-tecnicos/catalogo-de-servicios-cientifico-tecnicos" target="_blank">Scientific-Technological Core Facility</a> belonging to the <a href="https://www.csic.es" target="_blank">Spanish National Research Council</a>, and based in the <a href="https://www.icman.csic.es" target="_blank">Institute of Marine Sciences of Andalusia</a> specializing in the end-to-end management, analysis, and computational modeling of multi-source marine and ecological datasets. The platform will deliver state-of-the-art computational capabilities, encompassing high-performance data processing, multi-purpose statistical methodologies, and predictive numerical simulation, specifically tailored for research and innovation initiatives. See the <a href="https://datalab-icman.github.io/mission/">Mission</a> for more details.
   </div>
   
-  <!-- INICIO: Contenedor de las 3 imágenes con enlaces -->
-  <div class="image-links-container">
+    <div class="image-links-container">
     
-    <a href="https://www.icman.csic.es/" target="_blank" class="home-image-link" title="Ir a ICMAN">
-      <img src="files/ICMANLOGO.png" alt="Descripción de Imagen 1" class="home-image" id="home-image-1">
+    <a href="https://www.icman.csic.es/" target="_blank" class="home-image-link" title="Go to ICMAN">
+      <img src="files/ICMANLOGO.png" alt="Image 1 Description" class="home-image" id="home-image-1">
     </a>
 
-    <a href="https://www.csic.es/" target="_blank" class="home-image-link" title="Ir a CSIC">
-      <img src="files/CSIC-LOGO-sin-area-seguridad.png" alt="Descripción de Imagen 2" class="home-image" id="home-image-2">
+    <a href="https://www.csic.es/" target="_blank" class="home-image-link" title="Go to CSIC">
+      <img src="files/CSIC-LOGO-sin-area-seguridad.png" alt="Image 2 Description" class="home-image" id="home-image-2">
     </a>
 
-    <a href="https://www.ciencia.gob.es/" target="_blank" class="home-image-link" title="Ir a Web 3">
-      <img src="files/Web-Gob-Min-PNG-RGB-300ppp-1.png" alt="Descripción de Imagen 3" class="home-image" id="home-image-3">
+    <a href="https://www.ciencia.gob.es/" target="_blank" class="home-image-link" title="Go to Web 3">
+      <img src="files/Web-Gob-Min-PNG-RGB-300ppp-1.png" alt="Image 3 Description" class="home-image" id="home-image-3">
     </a>
 
   </div>
-  <!-- FIN: Contenedor de las 3 imágenes con enlaces -->
-  
+    
 </div>
 
 <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
@@ -381,7 +389,7 @@ const particlesConfig = {
   retina_detect: true
 };
 
-// Inicializar particles.js
+// Initialize particles.js
 particlesJS('particles-js', particlesConfig);
 
 let canClick = true;
@@ -390,7 +398,7 @@ document.addEventListener("click", function(event) {
   if (!canClick) return;
   canClick = false;
   
-  // LÍNEA CORREGIDA: Se cambia "?." por "?.[0]"
+  // CORRECTED LINE: "?." changed to "?.[0]"
   const pJSDom = window.pJSDom?.[0]; 
   if (!pJSDom) return;
   
@@ -839,7 +847,7 @@ document.addEventListener("click", function(event) {
 <p><span class="faux-block"><i class="fa-solid fa-key" aria-label="key"></i> <a href="pgpk.txt">PGP public key</a></span></p>
 </div>
     <div class="nav-footer-right">
-<p><span class="faux-block">Made with <a href="https://cran.r-project.org/"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a> and <a href="https://quarto.org/">Quarto</a></span> <span class="faux-block"><a href="https://git.csic.es/datalab-icman">View the source at <i class="fa-brands fa-github" aria-label="github"></i> GitHub</a></span></p>
+<p><span class="faux-block">Made with <a href="https://cran.r-project.org/"><i class="fa-brands fa-r-project" aria-label="r-project"></i></a> and <a href="https://quarto.org/">Quarto</a></span> <span class="faux-block"><a href="https://github.com/datalab-icman">View the source at <i class="fa-brands fa-github" aria-label="github"></i> GitHub</a></span></p>
 </div>
   </div>
 </footer>
