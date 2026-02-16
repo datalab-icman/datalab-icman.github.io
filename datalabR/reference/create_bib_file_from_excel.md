@@ -1,0 +1,54 @@
+# Create a .bib File from an Excel Sheet with DOI-Based Unique Keys
+
+This function reads a list of DOIs from an Excel file, fetches their
+BibTeX entries, and rewrites the citation key for each entry to be a
+sanitized version of its own DOI. This guarantees that every key is
+unique and traceable.
+
+## Usage
+
+``` r
+create_bib_file_from_excel(excel_path, doi_column_name, output_bib_path)
+```
+
+## Arguments
+
+- excel_path:
+
+  A string with the path to the .xlsx or .xls file.
+
+- doi_column_name:
+
+  A string with the exact name of the column containing the DOIs.
+
+- output_bib_path:
+
+  A string with the desired file path for the output .bib file (e.g.,
+  "references.bib").
+
+## Value
+
+This function does not return a value but prints messages to the console
+and writes a .bib file to the specified path.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+# First, create a dummy Excel file for demonstration
+if (requireNamespace("writexl", quietly = TRUE)) {
+  dummy_df <- data.frame(
+    Title = c("Article One", "Article Two"),
+    DOI = c("10.1126/science.1172133", "10.1073/pnas.0806414105")
+  )
+  writexl::write_xlsx(dummy_df, "my_articles.xlsx")
+
+  # Now, run the function
+  create_bib_file_from_excel(
+    excel_path = "my_articles.xlsx",
+    doi_column_name = "DOI",
+    output_bib_path = "references.bib"
+  )
+}
+} # }
+```

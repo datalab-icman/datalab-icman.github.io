@@ -1,0 +1,36 @@
+# Package index
+
+## All functions
+
+- [`MultiProgressBar`](https://datalab-icman.github.io/datalabR/reference/MultiProgressBar.md)
+  : Create a multi-bar progress display
+- [`ProgressBar`](https://datalab-icman.github.io/datalabR/reference/ProgressBar.md)
+  : Progress bar class with colored Unicode symbols
+- [`build_pkg()`](https://datalab-icman.github.io/datalabR/reference/build_pkg.md)
+  : Build, document, check, and install R package
+- [`build_quick()`](https://datalab-icman.github.io/datalabR/reference/build_presets.md)
+  [`build_full()`](https://datalab-icman.github.io/datalabR/reference/build_presets.md)
+  [`build_cran()`](https://datalab-icman.github.io/datalabR/reference/build_presets.md)
+  [`build_website()`](https://datalab-icman.github.io/datalabR/reference/build_presets.md)
+  : Quick build presets
+- [`create_bib_file_from_excel()`](https://datalab-icman.github.io/datalabR/reference/create_bib_file_from_excel.md)
+  : Create a .bib File from an Excel Sheet with DOI-Based Unique Keys
+- [`get_bibtex_entry()`](https://datalab-icman.github.io/datalabR/reference/get_bibtex_entry.md)
+  : Get a BibTeX entry from a DOI
+- [`progress_apply()`](https://datalab-icman.github.io/datalabR/reference/progress_apply.md)
+  : Apply a function with a colorful progress bar
+- [`progress_bar()`](https://datalab-icman.github.io/datalabR/reference/progress_bar.md)
+  : Create a progress bar for loops and iterations
+- [`progress_download()`](https://datalab-icman.github.io/datalabR/reference/progress_download.md)
+  : Create a progress bar for file downloads
+- [`progress_iterate()`](https://datalab-icman.github.io/datalabR/reference/progress_iterate.md)
+  : Iterate over elements with a visual progress bar
+- [`progress_parallel()`](https://datalab-icman.github.io/datalabR/reference/progress_parallel.md)
+  : Progress bar for parallel operations
+- [`progress_sleep()`](https://datalab-icman.github.io/datalabR/reference/progress_sleep.md)
+  : Show a progress bar for a specific duration
+- [`show_symbol_legend()`](https://datalab-icman.github.io/datalabR/reference/show_symbol_legend.md)
+  : Displays a legend of status and progress symbols
+- [`wflow_datalabr()`](https://datalab-icman.github.io/datalabR/reference/wflow_datalabr.md)
+  : A simple custom wrapper to create, configure and tune a workflowr
+  project
