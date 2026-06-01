@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servicio Científico-Técnico del CSIC — Puesta en marcha y cálculo de costes (Campaña 2026)</title>
+<meta name="description" content="Sitio público del Servicio Científico-Técnico del CSIC: mapa conceptual de la normativa, ensamblador interactivo de cálculo de costes y documentación oficial de la Campaña 2026.">
+<link rel="icon" href="favicon.ico" sizes="any">
+<style>
+  :root {
+    --rojo-csic: #b30000;
+    --rojo-csic-oscuro: #7a0000;
+    --azul: #1f4e79;
+    --azul-claro: #2e6aa0;
+    --gris-fondo: #f4f5f7;
+    --gris-borde: #d9dce1;
+    --gris-texto: #3a3f47;
+    --gris-suave: #6b7280;
+    --blanco: #ffffff;
+    --alto-cabecera: auto;
+    --sombra: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, "Liberation Sans", sans-serif;
+    color: var(--gris-texto);
+    background: var(--gris-fondo);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Cabecera institucional ===== */
+  header.sct-cabecera {
+    background: var(--blanco);
+    border-top: 3px solid var(--rojo-csic);
+    border-bottom: 1px solid var(--gris-borde);
+    box-shadow: var(--sombra);
+    flex: 0 0 auto;
+  }
+
+  .sct-cabecera-interior {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 7px 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .sct-logos {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: 0 0 auto;
+  }
+
+  .sct-logos img {
+    display: block;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .sct-logos img.logo-banner { height: 38px; }
+
+  .sct-titulos {
+    flex: 1 1 320px;
+    min-width: 260px;
+  }
+
+  .sct-titulos h1 {
+    margin: 0;
+    font-size: 1.0rem;
+    font-weight: 700;
+    color: var(--rojo-csic-oscuro);
+    line-height: 1.2;
+  }
+
+  .sct-titulos p.subtitulo {
+    margin: 2px 0 0;
+    font-size: 0.8rem;
+    color: var(--azul);
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  /* ===== Barra de pestañas ===== */
+  nav.sct-pestanas {
+    background: var(--azul);
+    flex: 0 0 auto;
+    box-shadow: var(--sombra);
+  }
+
+  .sct-pestanas-interior {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+  }
+
+  .sct-pestanas button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.82);
+    font-family: inherit;
+    font-size: 0.94rem;
+    font-weight: 600;
+    padding: 9px 22px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .sct-pestanas button:hover {
+    color: var(--blanco);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .sct-pestanas button:focus-visible {
+    outline: 2px solid var(--blanco);
+    outline-offset: -2px;
+  }
+
+  .sct-pestanas button.activa {
+    color: var(--blanco);
+    border-bottom-color: var(--rojo-csic);
+    background: rgba(255, 255, 255, 0.10);
+  }
+
+  /* ===== Área de contenido ===== */
+  main.sct-contenido {
+    flex: 1 1 auto;
+    position: relative;
+    min-height: 0;
+    display: flex;
+  }
+
+  .sct-panel {
+    display: none;
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .sct-panel.activo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sct-panel iframe {
+    width: 100%;
+    height: 100%;
+    flex: 1 1 auto;
+    border: 0;
+    display: block;
+    background: var(--blanco);
+  }
+
+  /* ===== Panel de documentación ===== */
+  .sct-docs {
+    overflow-y: auto;
+    background: var(--gris-fondo);
+  }
+
+  .sct-docs-interior {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 24px 56px;
+  }
+
+  .sct-docs-interior > p.intro {
+    margin: 0 0 28px;
+    font-size: 1rem;
+    color: var(--gris-texto);
+    max-width: 70ch;
+  }
+
+  .sct-docs h2 {
+    font-size: 1.12rem;
+    color: var(--rojo-csic-oscuro);
+    border-bottom: 2px solid var(--rojo-csic);
+    padding-bottom: 6px;
+    margin: 34px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sct-docs h2:first-of-type { margin-top: 0; }
+
+  ul.sct-lista-docs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+  }
+
+  ul.sct-lista-docs li {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-left: 4px solid var(--azul);
+    border-radius: 6px;
+    box-shadow: var(--sombra);
+  }
+
+  ul.sct-lista-docs li a {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 6px;
+    transition: background-color 0.15s ease;
+  }
+
+  ul.sct-lista-docs li a:hover { background: #fafbfc; }
+
+  ul.sct-lista-docs li a:focus-visible {
+    outline: 2px solid var(--azul);
+    outline-offset: 2px;
+  }
+
+  .doc-icono {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--blanco);
+  }
+
+  .doc-icono.pdf { background: var(--rojo-csic); }
+  .doc-icono.boe { background: var(--azul); }
+  .doc-icono.xlsx { background: #1d7a46; }
+
+  .doc-cuerpo { flex: 1 1 auto; min-width: 0; }
+
+  .doc-titulo {
+    font-weight: 600;
+    color: var(--azul);
+    font-size: 0.98rem;
+    margin: 0;
+  }
+
+  .doc-descripcion {
+    margin: 3px 0 0;
+    font-size: 0.86rem;
+    color: var(--gris-suave);
+  }
+
+  .doc-accion {
+    flex: 0 0 auto;
+    align-self: center;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--rojo-csic);
+    white-space: nowrap;
+  }
+
+  /* ===== Pie institucional ===== */
+  footer.sct-pie {
+    flex: 0 0 auto;
+    background: var(--blanco);
+    border-top: 1px solid var(--gris-borde);
+    color: var(--gris-suave);
+    font-size: 0.82rem;
+  }
+
+  .sct-pie-interior {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .sct-pie-interior .creditos {
+    font-weight: 600;
+    color: var(--gris-texto);
+  }
+
+  .sct-pie-interior .nota {
+    flex: 1 1 100%;
+    color: var(--gris-suave);
+    font-size: 0.8rem;
+  }
+
+  /* ===== Responsividad básica ===== */
+  @media (max-width: 720px) {
+    .sct-cabecera-interior {
+      padding: 6px 16px;
+      gap: 10px;
+    }
+    .sct-logos img.logo-banner { height: 30px; }
+    .sct-titulos h1 { font-size: 0.92rem; }
+    .sct-titulos p.subtitulo { font-size: 0.78rem; }
+    .sct-pestanas button { padding: 8px 14px; font-size: 0.86rem; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===================== CABECERA INSTITUCIONAL ===================== -->
+  <header class="sct-cabecera">
+    <div class="sct-cabecera-interior">
+      <div class="sct-logos">
+        <img class="logo-banner" src="docs/logos/banner-oficial.png" alt="Gobierno de España · Ministerio de Ciencia, Innovación y Universidades · Consejo Superior de Investigaciones Científicas (CSIC) · Instituto de Ciencias Marinas de Andalucía (ICMAN)">
+      </div>
+      <div class="sct-titulos">
+        <h1>Servicio Científico-Técnico del CSIC — Puesta en marcha y cálculo de costes (Campaña 2026)</h1>
+        <p class="subtitulo">Portal de apoyo para la constitución de Servicios Científico-Técnicos y la determinación de sus costes, tarifas y precios conforme a la normativa vigente.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== BARRA DE PESTAÑAS ===================== -->
+  <nav class="sct-pestanas" aria-label="Secciones del sitio">
+    <div class="sct-pestanas-interior" role="tablist">
+      <button type="button" id="tab-mapa" role="tab" aria-controls="panel-mapa" aria-selected="true" class="activa" onclick="activarPestana('mapa')">Mapa conceptual</button>
+      <button type="button" id="tab-app" role="tab" aria-controls="panel-app" aria-selected="false" onclick="activarPestana('app')">Ensamblador de SCT</button>
+      <button type="button" id="tab-docs" role="tab" aria-controls="panel-docs" aria-selected="false" onclick="activarPestana('docs')">Documentación oficial</button>
+    </div>
+  </nav>
+
+  <!-- ===================== CONTENIDO ===================== -->
+  <main class="sct-contenido">
+
+    <!-- Panel: Mapa conceptual (activo por defecto) -->
+    <section id="panel-mapa" class="sct-panel activo" role="tabpanel" aria-labelledby="tab-mapa">
+      <iframe id="frame-mapa" src="MAPA_CONCEPTUAL/mapa.html" title="Mapa conceptual de la normativa y las actividades del Servicio Científico-Técnico" loading="eager"></iframe>
+    </section>
+
+    <!-- Panel: Ensamblador de SCT -->
+    <section id="panel-app" class="sct-panel" role="tabpanel" aria-labelledby="tab-app">
+      <iframe id="frame-app" src="APP/index.html" title="Ensamblador interactivo del Servicio Científico-Técnico y cálculo de costes" loading="eager"></iframe>
+    </section>
+
+    <!-- Panel: Documentación oficial -->
+    <section id="panel-docs" class="sct-panel sct-docs" role="tabpanel" aria-labelledby="tab-docs">
+      <div class="sct-docs-interior">
+        <p class="intro">A continuación se relaciona la documentación oficial de la Campaña 2026. Las plantillas, las guías y las instrucciones con archivo local pueden descargarse directamente; las disposiciones de rango legal remiten a su publicación en el Boletín Oficial del Estado.</p>
+
+        <!-- ===== Plantillas y modelos ===== -->
+        <h2>Plantillas y modelos</h2>
+        <ul class="sct-lista-docs">
+          <li>
+            <a href="excel/PLANTILLA_C_c3_81LCULO_COSTES_SCT_2026.xlsx" download="Plantilla_calculo_de_costes_SCT_2026.xlsx">
+              <span class="doc-icono xlsx" aria-hidden="true">XLSX</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Plantilla oficial de cálculo de costes del SCT (2026)</span>
+                <span class="doc-descripcion">Plantilla Excel oficial para calcular el coste, las tarifas internas y los precios externos de cada variante. El ensamblador la genera ya cumplimentada.</span>
+              </span>
+              <span class="doc-accion">Descargar</span>
+            </a>
+          </li>
+          <li>
+            <a href="excel/C_c3_81LCULO_COSTES_DESPLAZAMIENTO.xlsx" download="Plantilla_calculo_de_costes_de_desplazamiento.xlsx">
+              <span class="doc-icono xlsx" aria-hidden="true">XLSX</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Plantilla de cálculo de costes de desplazamiento</span>
+                <span class="doc-descripcion">Plantilla Excel oficial para los gastos de desplazamiento (incluye la estimación de distancia ferroviaria y las tarifas por modalidad).</span>
+              </span>
+              <span class="doc-accion">Descargar</span>
+            </a>
+          </li>
+          <li>
+            <a href="excel/NOTA_DE_CARGO_INTERNO_SCT.pdf" download="Modelo_nota_de_cargo_interno_SCT.pdf">
+              <span class="doc-icono pdf" aria-hidden="true">PDF</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Modelo de nota de cargo interno del SCT</span>
+                <span class="doc-descripcion">Documento modelo para trasladar al demandante el coste de la prestación y los desplazamientos y dietas asociados.</span>
+              </span>
+              <span class="doc-accion">Descargar</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- ===== Guías y manuales ===== -->
+        <h2>Guías y manuales</h2>
+        <ul class="sct-lista-docs">
+          <li>
+            <a href="docs/GUIA_PLANTILLA_CALCULO_DE_COSTES_SCT_2026.pdf" download="Guia_calculo_de_costes_SCT_2026.pdf">
+              <span class="doc-icono pdf" aria-hidden="true">PDF</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Guía de la plantilla de cálculo de costes del SCT (2026)</span>
+                <span class="doc-descripcion">Manual de cumplimentación de la plantilla oficial de costes, tarifas y precios.</span>
+              </span>
+              <span class="doc-accion">Descargar</span>
+            </a>
+          </li>
+          <li>
+            <a href="docs/Instrucciones_Servicios_junio_202026.pdf" download="Instrucciones_Servicios_junio_2026.pdf">
+              <span class="doc-icono pdf" aria-hidden="true">PDF</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Instrucciones de Servicios (junio de 2026)</span>
+                <span class="doc-descripcion">Documento general de instrucciones para la prestación de servicios.</span>
+              </span>
+              <span class="doc-accion">Descargar</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- ===== Instrucciones y normativa ===== -->
+        <h2>Instrucciones y normativa</h2>
+        <ul class="sct-lista-docs">
+          <li>
+            <a href="docs/LEGISLACION/INSTRUCCION_20SEGE_201_20de_20junio_202017-_20Modelo_20de_20C_c3_a1lculo_20de_20Costes_20Tarifas_20y_20....pdf" download="Instruccion_SEGE_1-jun-2017.pdf">
+              <span class="doc-icono pdf" aria-hidden="true">PDF</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Instrucción SEGE de 1 de junio de 2017</span>
+                <span class="doc-descripcion">Modelo de cálculo de costes, tarifas y precios de los Servicios Científico-Técnicos.</span>
+              </span>
+              <span class="doc-accion">Descargar</span>
+            </a>
+          </li>
+          <li>
+            <a href="docs/LEGISLACION/INSTRUCCI_c3_93N_SEGE_DE_19_DE_MAYO_DE_2026_DE_LA_SECRETAR_c3_8dA_GENERAL_DEL_CSIC_POR_LA_QUE_SE_MODIFICA_LA_INSTRUCCI_c3_93N_DE_1_DE_JUNIO_DE_2017.pdf" download="Instruccion_SEGE_19-may-2026_CPC.pdf">
+              <span class="doc-icono pdf" aria-hidden="true">PDF</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Instrucción SEGE de 19 de mayo de 2026 (modificación de la de 2017)</span>
+                <span class="doc-descripcion">Modifica la Instrucción de 1 de junio de 2017 e introduce el concepto de coste de la parte capacitada (CPC).</span>
+              </span>
+              <span class="doc-accion">Descargar</span>
+            </a>
+          </li>
+          <li>
+            <a href="docs/LEGISLACION/report_INSTRUCCI_c3_93N_de_19_MAYO_2026_DE_LA_SECRETAR_c3_8dA_GENERAL_SOBRE_LA_APLICACI_c3_93N_DE_MODALIDADES_DE_COSTE_POR_DESPLAZAMIENTOS_Y_DIETAS_ASOCIADAS_A_LAS_PRESTACIONES_DEL_CAT_c3_81LOGO_DE.pdf" download="Instruccion_19-may-2026_Desplazamientos_y_dietas.pdf">
+              <span class="doc-icono pdf" aria-hidden="true">PDF</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Instrucción de 19 de mayo de 2026 sobre desplazamientos y dietas</span>
+                <span class="doc-descripcion">Aplicación de modalidades de coste por desplazamientos y dietas asociadas a las prestaciones del catálogo.</span>
+              </span>
+              <span class="doc-accion">Descargar</span>
+            </a>
+          </li>
+          <li>
+            <a href="docs/LEGISLACION/report_Resoluci_c3_b3n_20Presidencia_20para_20Cesi_c3_b3n_20de_20Espacios_20%28002%29.pdf" download="Resolucion_Presidencia_Cesion_de_Espacios.pdf">
+              <span class="doc-icono pdf" aria-hidden="true">PDF</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Resolución de la Presidencia para la cesión de espacios</span>
+                <span class="doc-descripcion">Régimen aplicable a la cesión de espacios e instalaciones.</span>
+              </span>
+              <span class="doc-accion">Descargar</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- ===== Referencias en el BOE ===== -->
+        <h2>Referencias en el BOE</h2>
+        <ul class="sct-lista-docs">
+          <li>
+            <a href="https://www.boe.es/eli/es/rd/2007/12/21/1730/con" target="_blank" rel="noopener">
+              <span class="doc-icono boe" aria-hidden="true">BOE</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Real Decreto 1730/2007, de 21 de diciembre</span>
+                <span class="doc-descripcion">Estatuto de la Agencia Estatal Consejo Superior de Investigaciones Científicas.</span>
+              </span>
+              <span class="doc-accion">Consultar en el BOE ↗</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.boe.es/eli/es/rd/2002/05/24/462/con" target="_blank" rel="noopener">
+              <span class="doc-icono boe" aria-hidden="true">BOE</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Real Decreto 462/2002, de 24 de mayo</span>
+                <span class="doc-descripcion">Indemnizaciones por razón del servicio.</span>
+              </span>
+              <span class="doc-accion">Consultar en el BOE ↗</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.boe.es/eli/es/o/2023/07/20/pcm829/con" target="_blank" rel="noopener">
+              <span class="doc-icono boe" aria-hidden="true">BOE</span>
+              <span class="doc-cuerpo">
+                <span class="doc-titulo">Orden PCM/829/2023, de 20 de julio</span>
+                <span class="doc-descripcion">Contrato de gestión de la Agencia Estatal CSIC (2023-2026).</span>
+              </span>
+              <span class="doc-accion">Consultar en el BOE ↗</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== PIE INSTITUCIONAL ===================== -->
+  <footer class="sct-pie">
+    <div class="sct-pie-interior">
+      <span class="creditos">CSIC · ICMAN · DataLab</span>
+      <span>Campaña 2026</span>
+      <span class="nota">Las herramientas y los contenidos de este sitio tienen carácter orientativo. No sustituyen a la normativa oficial del CSIC ni a la validación por la Dirección o la Gerencia del centro.</span>
+    </div>
+  </footer>
+
+  <!-- ===================== LÓGICA ===================== -->
+  <script>
+  (function () {
+    "use strict";
+
+    /* Conmutación de pestañas: muestra u oculta los paneles por CSS,
+       sin recrear los iframes (el bus de mensajes permanece siempre activo). */
+    var CLAVES = {
+      mapa: { tab: "tab-mapa", panel: "panel-mapa" },
+      app:  { tab: "tab-app",  panel: "panel-app" },
+      docs: { tab: "tab-docs", panel: "panel-docs" }
+    };
+
+    window.activarPestana = function (clave) {
+      if (!CLAVES[clave]) { return; }
+      Object.keys(CLAVES).forEach(function (k) {
+        var c = CLAVES[k];
+        var boton = document.getElementById(c.tab);
+        var panel = document.getElementById(c.panel);
+        var activa = (k === clave);
+        if (boton) {
+          boton.classList.toggle("activa", activa);
+          boton.setAttribute("aria-selected", activa ? "true" : "false");
+        }
+        if (panel) {
+          panel.classList.toggle("activo", activa);
+        }
+      });
+    };
+
+    /* Bus de mensajes (padre): escucha "abrir-mapa" desde la app,
+       activa la pestaña del mapa y reenvía "abrir-nota" al iframe del mapa. */
+    window.addEventListener("message", function (e) {
+      var d = e.data || {};
+      if (d.canal !== "sct-web") { return; }
+      if (d.accion === "abrir-mapa") {
+        activarPestana("mapa");
+        var fr = document.getElementById("frame-mapa");
+        if (fr && fr.contentWindow) {
+          fr.contentWindow.postMessage({ canal: "sct-web", accion: "abrir-nota", slug: d.slug }, "*");
+        }
+      }
+    });
+  })();
+  </script>
+
+</body>
+</html>
