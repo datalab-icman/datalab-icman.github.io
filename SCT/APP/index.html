@@ -752,38 +752,84 @@ button:disabled { opacity: .5; cursor: not-allowed; }
     // Arranque/enfriamiento
     var arrE = n(e.arrEnergia), arrF = n(e.arrFungibles);
     var arrNum = n(e.arrNumUMC) || 1, arrT = n(e.arrTiempo);
-    var arrAmort = arrNum ? (amortizado ? 0 : (V / A) * (arrT / T)) / arrNum : 0; // D41
+    var arrAmortFull = amortizado ? 0 : (V / A) * (arrT / T); // D40
+    var arrAmort = arrAmortFull / arrNum; // D41
 
     // Calibración intermedia
     var calE = n(e.calEnergia), calF = n(e.calFungibles);
     var calNum = n(e.calNumUMC) || 1, calT = n(e.calTiempo);
-    var calAmort = calNum ? (amortizado ? 0 : (V / A) * (calT / T)) / calNum : 0; // D52
+    var calAmortFull = amortizado ? 0 : (V / A) * (calT / T); // D51
+    var calAmort = calAmortFull / calNum; // D52
+
+    // Subtotales por bloque (igual que la plantilla)
+    var utilTotal = energia + fungC + fungM + fungE + amortEleg + amortDif; // D27
+    var utilEleg = (medida ? energia : 0) + fungC + fungM + amortEleg;      // F27
+    var utilNoEleg = (medida ? 0 : energia) + fungE + amortDif;            // G27
+    var utilMarg = energia + fungC + fungM + fungE;                        // H27
+    var utilAmort = amortEleg + amortDif;                                  // I27
+    var arrTotal = arrE + arrF + arrAmort; // D42
+    var calTotal = calE + calF + calAmort; // D53
 
     var r = vacio();
-    // elegible (F56)
-    r.elegible = (medida ? energia : 0) + fungC + fungM + amortEleg;
-    // no elegible (G56)
-    r.noElegible =
-      (medida ? 0 : energia) + fungE + amortDif + manten + arrE + arrF + arrAmort + calE + calF + calAmort;
-    // marginal (H56): energía y fungibles de utilización, arranque y calibración
-    r.marginal = energia + fungC + fungM + fungE + arrE + arrF + calE + calF;
-    // amortización (I56)
-    r.amortizacion = amortEleg + amortDif + arrAmort + calAmort;
-    r.total = r.elegible + r.noElegible; // D56 = D27+D31+D42+D53 (las amort ya están dentro)
+    r.elegible = utilEleg;                                                       // F56
+    r.noElegible = utilNoEleg + manten + arrTotal + calTotal;                    // G56
+    r.marginal = utilMarg + arrE + arrF + calE + calF;                          // H56
+    r.amortizacion = utilAmort + arrAmort + calAmort;                           // I56
+    r.total = r.elegible + r.noElegible;                                        // D56
+    // Mapa de celdas de la hoja "Equipo n" (para inyectar valores cacheados).
+    r.celdas = {
+      B10: A,
+      D25: amortEleg, D26: amortDif, D27: utilTotal,
+      F27: utilEleg, G27: utilNoEleg, H27: utilMarg, I27: utilAmort,
+      D31: manten, F32: 0, G32: manten, H32: 0, I32: 0,
+      D40: arrAmortFull, D41: arrAmort, D42: arrTotal,
+      F42: 0, G42: arrTotal, H42: arrE + arrF, I42: arrAmort,
+      D51: calAmortFull, D52: calAmort, D53: calTotal,
+      F53: 0, G53: calTotal, H53: calE + calF, I53: calAmort,
+      D56: r.total, F56: r.elegible, G56: r.noElegible, H56: r.marginal, I56: r.amortizacion,
+    };
     return r;
   }
 
   function calcEquipamiento(equipos) {
     var r = vacio();
+    r.equipos = [];
     (equipos || []).forEach(function (e) {
       var c = calcEquipo(e);
       r.elegible += c.elegible;
       r.noElegible += c.noElegible;
       r.marginal += c.marginal;
       r.amortizacion += c.amortizacion;
+      r.equipos.push(c);
     });
     r.total = r.elegible + r.noElegible;
     return r;
+  }
+
+  // Mapa de celdas de la hoja "Equipamiento" (espejos de cada "Equipo n" + sumas).
+  function celdasEquipamiento(equ) {
+    var c = {}, lista = equ.equipos || [];
+    lista.forEach(function (e, i) {
+      var R = 10 + i, cd = e.celdas;
+      c["D" + R] = cd.D56; c["F" + R] = cd.F56; c["G" + R] = cd.G56; c["H" + R] = cd.H56; c["I" + R] = cd.I56;
+    });
+    c.D21 = equ.total; c.F21 = equ.elegible; c.G21 = equ.noElegible; c.H21 = equ.marginal; c.I21 = equ.amortizacion;
+    var bloques = [
+      { f: "F27", g: "G27", h: "H27", i: "I27", base: 27, sum: 37 },
+      { f: "F32", g: "G32", h: "H32", i: "I32", base: 41, sum: 51 },
+      { f: "F42", g: "G42", h: "H42", i: "I42", base: 55, sum: 65 },
+      { f: "F53", g: "G53", h: "H53", i: "I53", base: 69, sum: 79 },
+    ];
+    bloques.forEach(function (b) {
+      var sF = 0, sG = 0, sH = 0, sI = 0;
+      lista.forEach(function (e, i) {
+        var R = b.base + i, cd = e.celdas;
+        c["F" + R] = cd[b.f]; c["G" + R] = cd[b.g]; c["H" + R] = cd[b.h]; c["I" + R] = cd[b.i];
+        sF += cd[b.f]; sG += cd[b.g]; sH += cd[b.h]; sI += cd[b.i];
+      });
+      c["F" + b.sum] = sF; c["G" + b.sum] = sG; c["H" + b.sum] = sH; c["I" + b.sum] = sI;
+    });
+    return c;
   }
 
   // ---------------------------------------------------------------------------
@@ -815,14 +861,24 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
   function calcInstalaciones(insts) {
     var r = vacio();
+    r.instalaciones = [];
     (insts || []).forEach(function (i) {
       var c = calcInstalacion(i);
       r.elegible += c.elegible;
       r.noElegible += c.noElegible;
       r.marginal += c.marginal;
+      r.instalaciones.push(c);
     });
     r.total = r.elegible + r.noElegible;
     return r;
+  }
+
+  // Mapa de celdas de la hoja "Instalación-Infraestructura" (bloques de 16 filas).
+  function celdasInstalacion(ins) {
+    var c = {}, lista = ins.instalaciones || [];
+    lista.slice(0, 4).forEach(function (it, i) { c["D" + (27 + 16 * i)] = it.total; });
+    c.D79 = ins.total; c.I79 = ins.elegible; c.J79 = ins.noElegible; c.K79 = ins.marginal;
+    return c;
   }
 
   // ---------------------------------------------------------------------------
@@ -832,7 +888,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   // ---------------------------------------------------------------------------
   function calcOtros(o) {
     var r = vacio();
-    if (!o) return r;
+    if (!o) { r.celdas = {}; return r; }
     (o.fungibles || []).forEach(function (f) {
       var coste = n(f.coste);
       if (f.clase === "estimacion") {
@@ -857,6 +913,29 @@ button:disabled { opacity: .5; cursor: not-allowed; }
       r.noElegible += coste; // certificaciones -> no elegible
     });
     r.total = r.elegible + r.noElegible;
+
+    // Mapa de celdas de la hoja "Otros" (G=elegible, H=no elegible, I=marginal, J=amortización).
+    var elegF = 0, noElegF = 0, allF = 0, nc = 0, nm = 0, ne = 0;
+    (o.fungibles || []).forEach(function (f) {
+      var coste = n(f.coste);
+      if (f.clase === "estimacion") { if (ne < 4) { noElegF += coste; allF += coste; ne++; } }
+      else if (f.clase === "medida") { if (nm < 4) { elegF += coste; allF += coste; nm++; } }
+      else { if (nc < 4) { elegF += coste; allF += coste; nc++; } }
+    });
+    function swAmort(s) { var T = n(s.horasAnuales) || 1, t = n(s.tiempoUMC); return ((n(s.valorAdq) - n(s.subvencionUE)) / C.amortSoftware) * (t / T); }
+    var sw = (o.software || []).slice(0, 2).map(swAmort);
+    var sw1 = sw[0] || 0, sw2 = sw[1] || 0, swT = sw1 + sw2;
+    var subcT = 0; (o.subcontratacion || []).slice(0, 2).forEach(function (s) { subcT += n(s.coste); });
+    var cert = (o.certificaciones || []).slice(0, 2).map(function (c) { return (n(c.costeAnual) / 8760) * n(c.duracionUso); });
+    var cert1 = cert[0] || 0, cert2 = cert[1] || 0, certT = cert1 + cert2;
+    r.celdas = {
+      E34: allF, G34: elegF, H34: noElegF, I34: allF, J34: 0,
+      E44: sw1, E52: sw2, E53: swT, G54: swT, H54: 0, I54: 0, J54: 0,
+      E58: subcT, G59: subcT, H59: 0, I59: subcT, J59: 0,
+      E64: cert1, E68: cert2, E69: certT, G70: 0, H70: certT, I70: 0, J70: 0,
+      E72: allF + swT + subcT + certT,
+      G72: elegF + swT + subcT, H72: noElegF + certT, I72: allF + subcT, J72: 0,
+    };
     return r;
   }
 
@@ -897,9 +976,19 @@ button:disabled { opacity: .5; cursor: not-allowed; }
     var precioAge = costeTotal * (1 + margenAge); // D14
     var precioOtros = costeTotal * (1 + margenOtros); // D15
 
+    // Mapas de celdas por hoja para inyectar los valores cacheados (que cada hoja
+    // muestre los importes sin depender del recálculo del visor).
+    var hojas = {
+      equipos: (equ.equipos || []).map(function (e) { return e.celdas; }),
+      equipamiento: incl.equipamiento ? celdasEquipamiento(equ) : null,
+      instalacion: incl.instalacion ? celdasInstalacion(ins) : null,
+      otros: incl.otros ? (otr.celdas || {}) : null,
+    };
+
     return {
       categorias: { personal: per, equipamiento: equ, instalacion: ins, otros: otr },
       desglose: { B21: B21, E21: E21, B22: B22, C22: C22, D22: D22, E22: E22, B23: B23, C23: C23, E23: E23, B24: B24, C24: C24, E24: E24, B25: B25, E25: E25, E26: E26, B27: B27, C27: C27, D27: D27, E27: E27 },
+      hojas: hojas,
       resumen: {
         costeTotal: costeTotal, // D9
         costeMarginal: C27, // marginal "puro" (sin IVA nd)
@@ -995,6 +1084,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
   SCT.motor = {
     calcular: calcular,
+    costeHora: costeHora,
     calcPersonal: calcPersonal,
     calcEquipo: calcEquipo,
     calcEquipamiento: calcEquipamiento,
@@ -1096,6 +1186,13 @@ button:disabled { opacity: .5; cursor: not-allowed; }
     return xml.replace(re, nuevo);
   }
 
+  // Inyecta un mapa {refCelda: valor} preservando las fórmulas (valor cacheado).
+  function inyectarCeldas(xml, mapa) {
+    if (!mapa) return xml;
+    Object.keys(mapa).forEach(function (ref) { xml = setFormulaResult(xml, ref, mapa[ref]); });
+    return xml;
+  }
+
   function rellenarHoja(files, ruta, fn) {
     var dec = new TextDecoder("utf-8"), enc = new TextEncoder();
     var xml = dec.decode(files[ruta]);
@@ -1146,20 +1243,42 @@ button:disabled { opacity: .5; cursor: not-allowed; }
       return x;
     });
 
-    // Personal
+    // Personal. Además del tipo (B) y las horas (D), se inyecta el valor cacheado
+    // del Coste/hora (C, fórmula VLOOKUP a Referencias) y del Importe (E = C*D), y
+    // de los subtotales/totales (G, E30, I30..L30), para que la hoja muestre los
+    // importes aunque el visor no recalcule (igual que se hace con "Resumen").
     if (incl.personal && estado.personal) {
       var p = estado.personal;
+      var costeH = (SCT.motor && SCT.motor.costeHora) ? SCT.motor.costeHora : function () { return 0; };
       rellenarHoja(files, HOJA.personal, function (x) {
-        (p.plantilla || []).slice(0, 5).forEach(function (it, i) {
-          x = setStr(x, "B" + (9 + i), it.tipo); x = setNum(x, "D" + (9 + i), it.horas);
-        });
-        (p.contratado || []).slice(0, 5).forEach(function (it, i) {
-          x = setStr(x, "B" + (15 + i), it.tipo); x = setNum(x, "D" + (15 + i), it.horas);
-        });
-        (p.noElegible || []).slice(0, 5).forEach(function (it, i) {
-          x = setStr(x, "B" + (21 + i), it.tipo); x = setNum(x, "D" + (21 + i), it.horas);
-        });
-        if (p.noCSIC) x = setNum(x, "E27", p.noCSIC);
+        function grupo(items, filaIni, tabla) {
+          var suma = 0;
+          (items || []).slice(0, 5).forEach(function (it, i) {
+            var fila = filaIni + i, horas = Number(it.horas) || 0;
+            var ch = it.tipo ? costeH(tabla, it.tipo) : 0;
+            x = setStr(x, "B" + fila, it.tipo);
+            x = setNum(x, "D" + fila, it.horas);
+            if (it.tipo) {
+              x = setFormulaResult(x, "C" + fila, ch);          // Coste/hora (cacheado)
+              x = setFormulaResult(x, "E" + fila, ch * horas);  // Importe (cacheado)
+            }
+            suma += ch * horas;
+          });
+          return suma;
+        }
+        var sP = grupo(p.plantilla, 9, "personal_plantilla");
+        var sC = grupo(p.contratado, 15, "personal_contratado");
+        var sN = grupo(p.noElegible, 21, "personal_no_elegible");
+        var noCSIC = Number(p.noCSIC) || 0;
+        if (noCSIC) x = setNum(x, "E27", noCSIC);
+        x = setFormulaResult(x, "G12", sP);                 // subtotal plantilla
+        x = setFormulaResult(x, "G18", sC);                 // subtotal contratado
+        x = setFormulaResult(x, "G24", sN);                 // subtotal no elegible
+        x = setFormulaResult(x, "E30", sP + sC + sN + noCSIC); // TOTAL importe
+        x = setFormulaResult(x, "I30", sP + sC);            // total elegible europeos
+        x = setFormulaResult(x, "J30", sN + noCSIC);        // total no elegible europeos
+        x = setFormulaResult(x, "K30", 0);                  // total marginal (personal: 0)
+        x = setFormulaResult(x, "L30", 0);                  // total amortización (personal: 0)
         return x;
       });
     }
@@ -1167,9 +1286,11 @@ button:disabled { opacity: .5; cursor: not-allowed; }
     // Equipamiento + hojas Equipo n
     if (incl.equipamiento && (estado.equipos || []).length) {
       var equipos = estado.equipos.slice(0, 10);
+      var hojasC = (calc && calc.hojas) || {};
       rellenarHoja(files, HOJA.equipam, function (x) {
         x = setNum(x, "B7", equipos.length);
         equipos.forEach(function (e, i) { x = setStr(x, "B" + (10 + i), e.descripcion || ("Equipo " + (i + 1))); });
+        x = inyectarCeldas(x, hojasC.equipamiento);
         return x;
       });
       equipos.forEach(function (e, i) {
@@ -1195,6 +1316,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
           x = setNum(x, "D46", e.calFungibles);
           if (e.calNumUMC) x = setNum(x, "D49", e.calNumUMC);
           x = setNum(x, "D50", e.calTiempo);
+          x = inyectarCeldas(x, (hojasC.equipos || [])[i]);
           return x;
         });
       });
@@ -1218,6 +1340,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
           x = setNum(x, "D" + (25 + off), it.serviciosGenerales);
           x = setNum(x, "D" + (26 + off), it.mantenimiento);
         });
+        x = inyectarCeldas(x, (calc && calc.hojas) ? calc.hojas.instalacion : null);
         return x;
       });
     }
@@ -1246,6 +1369,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
           x = setNum(x, "E" + b, c.duracionUso);
           x = setNum(x, "E" + (b + 1), c.costeAnual);
         });
+        x = inyectarCeldas(x, (calc && calc.hojas) ? calc.hojas.otros : null);
         return x;
       });
     }
