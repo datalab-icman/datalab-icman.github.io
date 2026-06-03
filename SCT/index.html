@@ -345,6 +345,7 @@
       <button type="button" id="tab-presupuesto" role="tab" aria-controls="panel-presupuesto" aria-selected="false" onclick="activarPestana('presupuesto')">Presupuesto y facturación</button>
       <button type="button" id="tab-nota" role="tab" aria-controls="panel-nota" aria-selected="false" onclick="activarPestana('nota')">Nota de cargo interno</button>
       <button type="button" id="tab-docs" role="tab" aria-controls="panel-docs" aria-selected="false" onclick="activarPestana('docs')">Documentación oficial</button>
+      <button type="button" id="tab-manual" role="tab" aria-controls="panel-manual" aria-selected="false" onclick="activarPestana('manual')">Manual de uso</button>
     </div>
   </nav>
 
@@ -518,6 +519,11 @@
       </div>
     </section>
 
+    <!-- Panel: Manual de uso -->
+    <section id="panel-manual" class="sct-panel" role="tabpanel" aria-labelledby="tab-manual">
+      <iframe id="frame-manual" src="MANUAL/index.html" title="Manual de uso del portal del Servicio Científico-Técnico del CSIC" loading="eager"></iframe>
+    </section>
+
   </main>
 
   <!-- ===================== PIE INSTITUCIONAL ===================== -->
@@ -541,7 +547,8 @@
       app:  { tab: "tab-app",  panel: "panel-app" },
       presupuesto: { tab: "tab-presupuesto", panel: "panel-presupuesto" },
       nota: { tab: "tab-nota", panel: "panel-nota" },
-      docs: { tab: "tab-docs", panel: "panel-docs" }
+      docs: { tab: "tab-docs", panel: "panel-docs" },
+      manual: { tab: "tab-manual", panel: "panel-manual" }
     };
 
     window.activarPestana = function (clave) {
@@ -566,6 +573,10 @@
     window.addEventListener("message", function (e) {
       var d = e.data || {};
       if (d.canal !== "sct-web") { return; }
+      if (d.accion === "ir-a" && d.clave) {
+        activarPestana(d.clave);
+        return;
+      }
       if (d.accion === "abrir-mapa") {
         activarPestana("mapa");
         var fr = document.getElementById("frame-mapa");

@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manual de uso del portal del Servicio Científico-Técnico del CSIC</title>
+  <meta name="description" content="Guía didáctica y exhaustiva para utilizar el portal del Servicio Científico-Técnico del CSIC: pestañas, asistentes, descarga de archivos, guardado y carga de sesiones, y conceptos clave.">
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <style>
+  :root {
+    --rojo: #b30000;
+    --rojo-osc: #7a0000;
+    --azul: #1f4e79;
+    --azul-cl: #e8f0f8;
+    --gris: #f4f5f7;
+    --gris-bd: #d6dae0;
+    --texto: #1c2530;
+    --tenue: #5b6675;
+    --verde: #1d7a46;
+    --ambar: #9a6b00;
+    --sombra: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.06);
+    --radio: 10px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--texto); background: var(--gris); line-height: 1.55; font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--azul); }
+
+  /* ===== Cabecera ===== */
+  header.app {
+    background: linear-gradient(100deg, var(--rojo), var(--rojo-osc));
+    color: #fff; padding: 8px 22px; display: flex; align-items: center; gap: 14px;
+    box-shadow: var(--sombra); position: sticky; top: 0; z-index: 20;
+  }
+  header.app .logo-cab {
+    height: 30px; width: auto; background: #fff; padding: 3px 7px; border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.18); flex: 0 0 auto;
+  }
+  header.app .marca { font-weight: 700; font-size: 16px; letter-spacing: .3px; }
+  header.app .sub { opacity: .9; font-size: 12px; }
+  header.app .acciones { margin-left: auto; display: flex; gap: 8px; }
+  header.app button {
+    font: inherit; cursor: pointer; border-radius: 8px; padding: 8px 14px; font-weight: 600;
+    background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.35);
+  }
+  header.app button:hover { background: rgba(255,255,255,.26); }
+  @media (max-width: 560px) { header.app .logo-cab { height: 26px; } header.app .sub { display:none; } }
+
+  /* ===== Estructura ===== */
+  .layout {
+    display: grid; grid-template-columns: 1fr 340px; gap: 22px;
+    max-width: 1180px; margin: 22px auto; padding: 0 18px;
+  }
+  @media (max-width: 940px) { .layout { grid-template-columns: 1fr; } .lateral { position: static !important; } }
+
+  .tarjeta { background: #fff; border: 1px solid var(--gris-bd); border-radius: var(--radio); box-shadow: var(--sombra); }
+  .contenido { padding: 26px 30px 34px; }
+  @media (max-width: 560px) { .contenido { padding: 20px 18px 26px; } }
+
+  .contenido h1.titulo { font-size: 24px; color: var(--rojo-osc); margin: 0 0 4px; }
+  .contenido .entradilla { color: var(--tenue); font-size: 15px; margin: 0 0 18px; max-width: 70ch; }
+
+  .contenido section { scroll-margin-top: 64px; }
+  .contenido h2 {
+    font-size: 19px; color: var(--rojo-osc); margin: 34px 0 12px; padding-bottom: 6px;
+    border-bottom: 2px solid var(--rojo); display: flex; align-items: center; gap: 10px;
+  }
+  .contenido h2 .n {
+    flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; background: var(--rojo); color: #fff;
+    font-size: 13px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700;
+  }
+  .contenido h3 { font-size: 15.5px; color: var(--azul); margin: 22px 0 6px; }
+  .contenido h3 .chip { margin-left: 8px; }
+  .contenido p { margin: 8px 0; }
+  .contenido ul, .contenido ol { margin: 8px 0; padding-left: 22px; }
+  .contenido li { margin: 5px 0; }
+  .contenido strong { color: var(--texto); }
+  .contenido .formula {
+    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 13px;
+    background: var(--gris); border: 1px solid var(--gris-bd); border-radius: 4px; padding: 1px 5px;
+  }
+
+  /* ===== Índice ===== */
+  .indice { background: var(--azul-cl); border: 1px solid #bcd3ea; border-radius: var(--radio); padding: 14px 18px; margin: 6px 0 8px; }
+  .indice .cab { font-weight: 700; color: var(--azul); font-size: 13px; text-transform: uppercase; letter-spacing: .4px; margin-bottom: 8px; }
+  .indice ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 26px; }
+  @media (max-width: 560px) { .indice ol { columns: 1; } }
+  .indice li { margin: 3px 0; }
+  .indice a { text-decoration: none; font-weight: 500; }
+  .indice a:hover { text-decoration: underline; color: var(--rojo); }
+
+  /* ===== Tarjetas de pestañas ===== */
+  .rejilla-pest { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  @media (max-width: 620px) { .rejilla-pest { grid-template-columns: 1fr; } }
+  .pest-card { border: 1px solid var(--gris-bd); border-left: 4px solid var(--azul); border-radius: 10px; padding: 13px 15px; background: #fcfdfe; }
+  .pest-card .tt { font-weight: 700; color: var(--azul); display: flex; align-items: center; gap: 8px; }
+  .pest-card .tt .ico { flex: 0 0 auto; width: 24px; height: 24px; border-radius: 6px; background: var(--azul); color: #fff; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+  .pest-card p { font-size: 13.5px; color: var(--tenue); margin: 6px 0 8px; }
+  .pest-card.actual { border-left-color: var(--rojo); background: #fff7f7; }
+  .pest-card.actual .tt, .pest-card.actual .tt .ico { color: #fff; }
+  .pest-card.actual .tt { color: var(--rojo-osc); }
+  .pest-card.actual .tt .ico { background: var(--rojo); }
+
+  .ir-btn {
+    font: inherit; cursor: pointer; border: 1px solid var(--gris-bd); background: #fff; color: var(--azul);
+    border-radius: 7px; padding: 5px 11px; font-size: 13px; font-weight: 600;
+  }
+  .ir-btn:hover { border-color: var(--azul); background: var(--azul-cl); }
+  .ir-btn:disabled { opacity: .5; cursor: default; }
+
+  /* ===== Pasos numerados ===== */
+  ol.pasos { list-style: none; padding-left: 0; margin: 10px 0; counter-reset: paso; }
+  ol.pasos > li { position: relative; padding: 4px 0 12px 40px; counter-increment: paso; }
+  ol.pasos > li:before {
+    content: counter(paso); position: absolute; left: 0; top: 2px; width: 26px; height: 26px;
+    background: var(--azul-cl); color: var(--azul); border: 1px solid #bcd3ea; border-radius: 50%;
+    font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center;
+  }
+  ol.pasos > li:not(:last-child):after {
+    content: ""; position: absolute; left: 13px; top: 30px; bottom: 0; width: 1px; background: var(--gris-bd);
+  }
+  ol.pasos > li b.t { color: var(--texto); }
+
+  /* ===== Avisos ===== */
+  .aviso { border-radius: 9px; padding: 11px 14px; margin: 12px 0; font-size: 14px; display: flex; gap: 10px; }
+  .aviso .mk { flex: 0 0 auto; font-weight: 700; }
+  .aviso.info { background: var(--azul-cl); border: 1px solid #bcd3ea; color: #1a3d5c; }
+  .aviso.ok { background: #e8f6ee; border: 1px solid #aed9c0; color: #145c34; }
+  .aviso.cuidado { background: #fff8e6; border: 1px solid #f0d98c; color: var(--ambar); }
+  .aviso.priv { background: #f3eefc; border: 1px solid #d6c6f0; color: #4a2f7a; }
+
+  /* ===== Tabla ===== */
+  .tabla-wrap { overflow-x: auto; }
+  table.tabla { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13.5px; }
+  table.tabla th, table.tabla td { border: 1px solid var(--gris-bd); padding: 8px 10px; text-align: left; vertical-align: top; }
+  table.tabla th { background: var(--azul); color: #fff; font-weight: 600; }
+  table.tabla tr:nth-child(even) td { background: #fafbfc; }
+  table.tabla code { background: var(--gris); border: 1px solid var(--gris-bd); border-radius: 4px; padding: 0 4px; font-size: 12.5px; }
+
+  /* ===== FAQ ===== */
+  .faq { border: 1px solid var(--gris-bd); border-radius: 9px; margin: 10px 0; background: #fff; overflow: hidden; }
+  .faq > summary { cursor: pointer; padding: 12px 15px; font-weight: 600; color: var(--azul); list-style: none; display: flex; align-items: center; gap: 10px; }
+  .faq > summary:before { content: "▸"; color: var(--rojo); transition: transform .15s ease; }
+  .faq[open] > summary:before { transform: rotate(90deg); }
+  .faq > summary::-webkit-details-marker { display: none; }
+  .faq .cuerpo { padding: 0 15px 13px 36px; font-size: 14px; color: var(--texto); }
+  .faq .cuerpo p:first-child { margin-top: 0; }
+
+  /* ===== Etiquetas / chips ===== */
+  .chip { display: inline-block; font-size: 11px; background: var(--azul-cl); color: var(--azul); border-radius: 12px; padding: 1px 9px; font-weight: 600; vertical-align: middle; }
+  .chip.docx { background: #e4eefb; color: #1b5e9b; }
+  .chip.pdf { background: #fdeaea; color: var(--rojo); }
+  .chip.xlsx { background: #e6f5ec; color: var(--verde); }
+  .chip.json { background: #efeafc; color: #5a3aa8; }
+
+  /* ===== Enlace "¿qué es?" ===== */
+  a.que-es {
+    font-weight: 500; font-size: 12px; color: var(--azul); margin-left: 6px;
+    text-decoration: none; cursor: pointer; white-space: nowrap; vertical-align: baseline;
+    border-bottom: 1px dotted var(--azul);
+  }
+  a.que-es:hover { color: var(--rojo); border-bottom-color: var(--rojo); }
+  a.que-es:focus-visible { outline: 2px solid var(--azul-cl); outline-offset: 2px; border-radius: 3px; }
+  a.que-es:before { content: "ⓘ "; opacity: .8; }
+
+  /* ===== Panel flotante de ayuda ===== */
+  .que-pop {
+    position: fixed; z-index: 9999; display: none; box-sizing: border-box;
+    width: 320px; max-width: 320px; max-height: 62vh; overflow-y: auto;
+    padding: 13px 15px; font-size: 13px; line-height: 1.5;
+    background: #fff; color: var(--texto);
+    border: 1px solid var(--gris-bd); border-top: 3px solid var(--rojo);
+    border-radius: 10px; box-shadow: 0 8px 28px rgba(0,0,0,.18);
+  }
+  .que-pop .qp-tit { font-weight: 700; color: var(--rojo-osc); font-size: 13.5px; margin-bottom: 5px; }
+  .que-pop .qp-ayuda p { margin: 0 0 7px; }
+  .que-pop .qp-ayuda p:last-child { margin-bottom: 0; }
+  .que-pop .qp-ayuda ul { margin: 4px 0 7px; padding-left: 18px; }
+  .que-pop .qp-ayuda li { margin: 2px 0; }
+  .que-pop .qp-ayuda strong { color: var(--rojo-osc); }
+  .que-pop .qp-ayuda .formula {
+    font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 12px;
+    background: var(--gris); border: 1px solid var(--gris-bd); border-radius: 4px; padding: 0 4px;
+  }
+  .que-pop .qp-link {
+    display: inline-block; margin-top: 8px; font-weight: 600; font-size: 12.5px; color: var(--azul);
+    text-decoration: none; border-bottom: 1px solid transparent;
+  }
+  .que-pop .qp-link:hover { color: var(--rojo); border-bottom-color: var(--rojo); }
+
+  /* ===== Columna lateral ===== */
+  .lateral { position: sticky; top: 64px; align-self: start; }
+  .lateral .cab { background: var(--azul); color: #fff; padding: 13px 16px; border-radius: var(--radio) var(--radio) 0 0; font-weight: 700; font-size: 15px; }
+  .lateral .cuerpo { padding: 15px 16px 18px; max-height: calc(100vh - 110px); overflow-y: auto; }
+  .lateral h4 { font-size: 13.5px; color: var(--rojo-osc); margin: 16px 0 4px; }
+  .lateral h4:first-child { margin-top: 0; }
+  .lateral p { font-size: 13.5px; margin: 6px 0; color: var(--texto); }
+  .lateral .cascada { list-style: none; margin: 8px 0; padding: 0; }
+  .lateral .cascada li { position: relative; padding: 5px 0 5px 16px; font-size: 13.5px; border-left: 2px solid var(--gris-bd); margin-left: 4px; }
+  .lateral .cascada li b { color: var(--azul); }
+  .lateral .nota-leg { font-size: 11.5px; color: var(--tenue); border-left: 3px solid var(--gris-bd); padding: 3px 0 3px 10px; margin: 10px 0 0; }
+
+  footer.pie { max-width: 1180px; margin: 6px auto 30px; padding: 0 18px; color: var(--tenue); font-size: 12.5px; text-align: center; }
+
+  @media print {
+    header.app .acciones, .indice, .ir-btn, a.que-es, .que-pop { display: none !important; }
+    .layout { display: block; max-width: none; margin: 0; padding: 0; }
+    .lateral { position: static !important; margin-top: 18px; }
+    .tarjeta { box-shadow: none; border: none; }
+    body { background: #fff; font-size: 12px; }
+    .faq { border: 1px solid #ccc; }
+    .faq .cuerpo { display: block !important; }
+  }
+  </style>
+</head>
+<body>
+
+  <header class="app">
+    <img class="logo-cab" src="../docs/logos/banner-oficial.png" alt="Gobierno de España · Ministerio de Ciencia, Innovación y Universidades · CSIC · ICMAN">
+    <div>
+      <div class="marca">Manual de uso · CSIC</div>
+      <div class="sub">Guía didáctica para utilizar el portal del Servicio Científico-Técnico, paso a paso</div>
+    </div>
+    <div class="acciones">
+      <button type="button" id="btn-imprimir" title="Imprimir esta guía o guardarla en PDF">Imprimir / PDF</button>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- ===================== COLUMNA PRINCIPAL ===================== -->
+    <main class="tarjeta contenido">
+      <h1 class="titulo">Manual de uso del portal</h1>
+      <p class="entradilla">Esta guía explica, de forma sencilla y completa, cómo utilizar todas las herramientas de este sitio aunque sea la primera vez que lo abre. No necesita conocimientos previos: lea de arriba abajo, o salte directamente al apartado que le interese desde el índice. A la derecha encontrará, en paralelo, una explicación rigurosa de <strong>qué es un Servicio Científico-Técnico</strong> y por qué existe.</p>
+
+      <div class="aviso info"><span class="mk">ⓘ</span><div>A lo largo del texto verá enlaces <a class="que-es" data-clave="que_es_link" href="#">¿qué es?</a> Pase el ratón por encima (o púlselos) para abrir una pequeña ventana con la explicación del concepto y, cuando proceda, un acceso a su ficha completa en el mapa conceptual.</div></div>
+
+      <nav class="indice" aria-label="Índice del manual">
+        <div class="cab">Contenido de esta guía</div>
+        <ol>
+          <li><a href="#orientacion">Un vistazo general: las pestañas</a></li>
+          <li><a href="#asistentes">Cómo funcionan los asistentes</a></li>
+          <li><a href="#mapa">El mapa conceptual</a></li>
+          <li><a href="#ensamblador">El Ensamblador de SCT</a></li>
+          <li><a href="#presupuesto">Presupuesto y facturación</a></li>
+          <li><a href="#nota">Nota de cargo interno</a></li>
+          <li><a href="#documentacion">Documentación oficial</a></li>
+          <li><a href="#sesiones">Guardar, cargar y empezar de nuevo</a></li>
+          <li><a href="#descargas">Qué archivo se descarga en cada caso</a></li>
+          <li><a href="#privacidad">Privacidad, requisitos y consejos</a></li>
+          <li><a href="#faq">Preguntas frecuentes</a></li>
+        </ol>
+      </nav>
+
+      <!-- 1 -->
+      <section id="orientacion">
+        <h2><span class="n">1</span> Un vistazo general: las pestañas</h2>
+        <p>En la parte superior del sitio hay una <strong>barra de pestañas azul</strong>. Cada pestaña abre una herramienta distinta; al pulsar en una, el contenido cambia sin recargar la página y sin perder lo que haya escrito en las demás. Estas son las seis secciones, en orden:</p>
+
+        <div class="rejilla-pest">
+          <div class="pest-card">
+            <div class="tt"><span class="ico">①</span> Mapa conceptual</div>
+            <p>Un esquema interactivo de toda la normativa y los conceptos. Es el «porqué» del sistema: para entender antes de calcular.</p>
+            <button class="ir-btn" data-ir="mapa">Ir a esta pestaña →</button>
+          </div>
+          <div class="pest-card">
+            <div class="tt"><span class="ico">②</span> Ensamblador de SCT</div>
+            <p>El asistente principal: calcula el coste, las tarifas y los precios de una variante y genera la <strong>plantilla Excel</strong> oficial ya cumplimentada.</p>
+            <button class="ir-btn" data-ir="app">Ir a esta pestaña →</button>
+          </div>
+          <div class="pest-card">
+            <div class="tt"><span class="ico">③</span> Presupuesto y facturación</div>
+            <p>Genera la <strong>oferta de prestación</strong> (documento Word con membrete del CSIC) a partir de los datos que introduzca.</p>
+            <button class="ir-btn" data-ir="presupuesto">Ir a esta pestaña →</button>
+          </div>
+          <div class="pest-card">
+            <div class="tt"><span class="ico">④</span> Nota de cargo interno</div>
+            <p>Rellena el <strong>formulario oficial en PDF</strong> de la nota de cargo, con el total y los costes indirectos calculados automáticamente.</p>
+            <button class="ir-btn" data-ir="nota">Ir a esta pestaña →</button>
+          </div>
+          <div class="pest-card">
+            <div class="tt"><span class="ico">⑤</span> Documentación oficial</div>
+            <p>Un repositorio para descargar las plantillas, las guías y las instrucciones, con enlaces a la normativa publicada en el BOE.</p>
+            <button class="ir-btn" data-ir="docs">Ir a esta pestaña →</button>
+          </div>
+          <div class="pest-card actual">
+            <div class="tt"><span class="ico">⑥</span> Manual de uso</div>
+            <p>Esta misma página. Puede volver a ella en cualquier momento para consultar cómo funciona cada herramienta.</p>
+            <button class="ir-btn" disabled>Está aquí</button>
+          </div>
+        </div>
+
+        <div class="aviso ok"><span class="mk">✓</span><div>No hay un orden obligatorio, pero el recorrido natural es: <strong>entender</strong> (mapa conceptual) → <strong>calcular</strong> (ensamblador) → <strong>ofertar</strong> (presupuesto) → <strong>cobrar</strong> (nota de cargo).</div></div>
+      </section>
+
+      <!-- 2 -->
+      <section id="asistentes">
+        <h2><span class="n">2</span> Cómo funcionan los asistentes</h2>
+        <p>Tres de las herramientas —el <strong>Ensamblador</strong>, el <strong>Presupuesto</strong> y la <strong>Nota de cargo</strong>— comparten el mismo formato de <em>asistente</em> <a class="que-es" data-clave="asistente" href="#">¿qué es?</a> (un cuestionario por pasos). Si aprende a manejar uno, sabrá manejar los tres. Sus elementos son siempre los mismos:</p>
+        <ul>
+          <li><strong>Barra de pasos (hitos).</strong> <a class="que-es" data-clave="hitos" href="#">¿qué es?</a> Arriba aparecen unas etiquetas redondeadas, una por paso. La del paso actual se marca en rojo; las ya completadas, en azul. Puede pulsar en cualquiera para saltar directamente a ese paso.</li>
+          <li><strong>Avanzar y retroceder.</strong> Al final de cada paso hay botones <strong>«Siguiente»</strong> y <strong>«Atrás»</strong>. Avance cuando haya rellenado lo necesario; puede volver atrás sin perder nada.</li>
+          <li><strong>Campos de datos.</strong> Escriba en las casillas de texto, elija en los <strong>desplegables</strong> y teclee las cifras en los campos numéricos. Los importes se muestran en <strong>formato español</strong> <a class="que-es" data-clave="formato_numero" href="#">¿qué es?</a> (punto para los miles y coma para los decimales: <span class="formula">1.234,56</span>).</li>
+          <li><strong>Líneas repetibles.</strong> Donde puede haber varios elementos (conceptos, equipos, personal, viajes…) hay un botón <strong>«Añadir»</strong> para sumar líneas y una <strong>✕</strong> para quitarlas.</li>
+          <li><strong>Ayuda «¿Qué es?».</strong> Junto a muchos campos aparece este enlace. Ábralo para leer qué significa el campo, cómo rellenarlo y la norma en que se basa.</li>
+          <li><strong>Panel de resumen en vivo.</strong> A la derecha (o debajo, en pantallas estrechas) hay un panel que <strong>recalcula los totales a medida que escribe</strong>, para que vea el efecto de cada dato al instante.</li>
+          <li><strong>Autoguardado.</strong> <a class="que-es" data-clave="autoguardado" href="#">¿qué es?</a> Todo lo que introduce se guarda automáticamente en su navegador. Si cierra la pestaña y vuelve más tarde, su trabajo seguirá ahí.</li>
+        </ul>
+        <div class="aviso info"><span class="mk">ⓘ</span><div>El último paso de cada asistente es siempre <strong>«Revisión y descarga»</strong>: muestra un resumen de todo lo introducido y los botones para descargar el documento final.</div></div>
+      </section>
+
+      <!-- 3 -->
+      <section id="mapa">
+        <h2><span class="n">3</span> El mapa conceptual</h2>
+        <p>La pestaña <strong>«Mapa conceptual»</strong> muestra un grafo interactivo que conecta la normativa, los conceptos económicos y las actividades del sistema de Servicios Científico-Técnicos. Es la herramienta para <strong>comprender</strong> cómo encaja todo antes de ponerse a calcular.</p>
+        <ol class="pasos">
+          <li><b class="t">Explore el grafo.</b> Cada círculo es una ficha (una norma, un concepto o una actividad). Las líneas indican relaciones entre ellos. Arrastre el fondo para desplazarse y use la rueda del ratón para acercar o alejar.</li>
+          <li><b class="t">Abra una ficha.</b> Pulse sobre un círculo para abrir su ficha, con la definición, la fuente normativa y los enlaces a los conceptos relacionados.</li>
+          <li><b class="t">Navegue entre conceptos.</b> Dentro de una ficha, los términos enlazados le llevan a otras fichas, de modo que puede recorrer el sistema concepto a concepto.</li>
+        </ol>
+        <div class="aviso ok"><span class="mk">✓</span><div>Desde casi cualquier enlace <a class="que-es" data-clave="que_es_link" href="#">¿qué es?</a> de las demás herramientas puede saltar directamente a la ficha correspondiente de este mapa.</div></div>
+      </section>
+
+      <!-- 4 -->
+      <section id="ensamblador">
+        <h2><span class="n">4</span> El Ensamblador de SCT</h2>
+        <p>Es la herramienta central. Le va preguntando los datos de una <strong>variante</strong> <a class="que-es" data-clave="variante" data-slug="Variante" href="#">¿qué es?</a> de prestación y calcula su coste, sus tarifas internas y sus precios externos siguiendo el modelo oficial. Al terminar, genera la <strong>plantilla Excel</strong> del CSIC ya rellena.</p>
+        <h3>Los pasos, uno a uno</h3>
+        <ol class="pasos">
+          <li><b class="t">Servicio.</b> El <strong>centro o instituto</strong> (desplegable con los 148 del CSIC), el nombre de la <strong>USCT</strong> <a class="que-es" data-clave="usct" data-slug="USCT" href="#">¿qué es?</a>, la persona responsable y la <strong>cuenta interna</strong> <a class="que-es" data-clave="cuenta_interna" data-slug="Cuenta-Interna" href="#">¿qué es?</a>.</li>
+          <li><b class="t">Prestación.</b> El nombre (en castellano e inglés), la descripción, la agrupación y si la prestación <strong>ya existe en el catálogo</strong> <a class="que-es" data-clave="catalogo" data-slug="Criterios-Catalogo" href="#">¿qué es?</a>. Si es nueva, el asistente le preparará el borrador para solicitarla <a class="que-es" data-clave="nueva_prestacion" data-slug="Solicitar-Nueva-Prestacion" href="#">¿qué es?</a>.</li>
+          <li><b class="t">Variante y UMC.</b> El nombre de la variante y su <strong>Unidad de Medida de Coste</strong> <a class="que-es" data-clave="umc" data-slug="UMC" href="#">¿qué es?</a>: la unidad respecto a la que se calculan todos los importes.</li>
+          <li><b class="t">¿Qué costes incluye?</b> Indique si la variante tiene costes de <strong>personal</strong>, <strong>equipamiento</strong>, <strong>instalación</strong> y/o <strong>otros</strong>. Según lo que marque, el asistente abre o salta los pasos correspondientes.</li>
+          <li><b class="t">Costes detallados.</b> Por cada tipo activado, introduzca los datos por UMC (categorías y horas de personal; equipos con amortización <a class="que-es" data-clave="amortizacion" data-slug="Amortizacion" href="#">¿qué es?</a>, energía y fungibles; instalaciones; software, subcontrataciones, etc.).</li>
+          <li><b class="t">Desplazamientos y dietas.</b> <a class="que-es" data-clave="desplazamientos" data-slug="Instruccion-2026-Desplazamientos" href="#">¿qué es?</a> Si los hay, se calculan aparte (no forman parte del coste de la variante: se trasladan en la nota de cargo).</li>
+          <li><b class="t">Revisión y descarga.</b> El panel económico muestra el <strong>coste total</strong> <a class="que-es" data-clave="coste_total" data-slug="Coste-Total" href="#">¿qué es?</a>, el <strong>coste marginal</strong> <a class="que-es" data-clave="coste_marginal" data-slug="Coste-Marginal" href="#">¿qué es?</a>, las <strong>tarifas internas</strong> <a class="que-es" data-clave="tarifa_interna" data-slug="Tarifa-Uso-Interno" href="#">¿qué es?</a> y los <strong>precios externos</strong> <a class="que-es" data-clave="precio_externo" data-slug="Precio-Externo" href="#">¿qué es?</a>, cada cifra con su cita normativa.</li>
+        </ol>
+        <h3>Qué se descarga <span class="chip xlsx">XLSX</span></h3>
+        <ul>
+          <li><strong>Plantilla oficial de cálculo de costes</strong> <span class="chip xlsx">.xlsx</span>, ya cumplimentada y con sus fórmulas intactas. Es el archivo que se sube a la campaña.</li>
+          <li><strong>Plantilla de cálculo de desplazamiento</strong> <span class="chip xlsx">.xlsx</span>, si ha introducido viajes.</li>
+          <li><strong>Dossier de guía</strong>, una página imprimible (o exportable a PDF) con el resumen, la lista de comprobación de la campaña y, si la prestación es nueva, el borrador del correo de solicitud.</li>
+        </ul>
+        <div class="aviso cuidado"><span class="mk">!</span><div>No modifique la estructura del Excel generado (no borre ni mueva hojas o celdas): el sistema del CSIC lee valores en <strong>celdas fijas</strong> de la hoja «Resumen». Limítese a revisarlo y subirlo.</div></div>
+      </section>
+
+      <!-- 5 -->
+      <section id="presupuesto">
+        <h2><span class="n">5</span> Presupuesto y facturación</h2>
+        <p>Esta herramienta genera la <strong>oferta de prestación de servicio</strong>: el documento Word <a class="que-es" data-clave="docx" href="#">¿qué es?</a> con el membrete oficial del CSIC que se entrega al solicitante. Usted introduce los datos y el documento se descarga ya redactado y relleno.</p>
+        <h3>Los pasos</h3>
+        <ol class="pasos">
+          <li><b class="t">Servicio.</b> El centro (desplegable), el objeto del servicio, el plazo y la persona responsable.</li>
+          <li><b class="t">Solicitante.</b> Razón social, domicilio, CIF, representante y datos de contacto de quien pide el servicio.</li>
+          <li><b class="t">Objeto y plazo.</b> La descripción de lo que se ofrece y los plazos de ejecución.</li>
+          <li><b class="t">Conceptos e importes.</b> Una o varias líneas (descripción, cantidad, precio e IVA). El total y el IVA se calculan solos.</li>
+          <li><b class="t">Forma de pago.</b> Los datos de pago (IBAN, BIC, beneficiario).</li>
+          <li><b class="t">Firmas.</b> Lugar, fecha y firmantes.</li>
+          <li><b class="t">Revisión y descarga.</b> Comprobación final y descarga del documento.</li>
+        </ol>
+        <h3>Qué se descarga <span class="chip docx">DOCX</span></h3>
+        <ul>
+          <li>El <strong>documento Word</strong> <span class="chip docx">.docx</span> de la oferta, con el membrete, los estilos y los logotipos del CSIC, listo para firmar o convertir a PDF.</li>
+          <li>Opcionalmente, una <strong>versión imprimible</strong> que puede guardar como PDF desde el diálogo de impresión.</li>
+        </ul>
+        <div class="aviso priv"><span class="mk">🔒</span><div>Esta herramienta <strong>arranca siempre vacía</strong>: nunca aparece por defecto ningún dato sensible (ni cuentas, ni nombres). Los textos en gris claro de las casillas son solo <em>ejemplos orientativos</em> que no se guardan ni se incluyen en el documento.</div></div>
+      </section>
+
+      <!-- 6 -->
+      <section id="nota">
+        <h2><span class="n">6</span> Nota de cargo interno</h2>
+        <p>La <strong>nota de cargo interno</strong> <a class="que-es" data-clave="nota_cargo" data-slug="Nota-de-Cargo" href="#">¿qué es?</a> es el documento con el que se traslada a otra unidad del CSIC el coste de una prestación. Esta herramienta rellena el <strong>formulario oficial en PDF</strong> <a class="que-es" data-clave="acroform" href="#">¿qué es?</a>: usted introduce los datos y se descarga el mismo PDF oficial, ya cumplimentado sobre su membrete.</p>
+        <h3>Los pasos</h3>
+        <ol class="pasos">
+          <li><b class="t">Solicitante.</b> Nombre y apellidos, proyecto y centro de quien solicita el servicio.</li>
+          <li><b class="t">Servicio prestador.</b> Centro, código del SCT y cuenta interna del servicio que presta.</li>
+          <li><b class="t">Variante.</b> Nombre, UMC y número de unidades.</li>
+          <li><b class="t">Costes y fecha.</b> Coste marginal, viajes y dietas, cuenta de costes indirectos <a class="que-es" data-clave="costes_indirectos" data-slug="Costes-Indirectos" href="#">¿qué es?</a> y fecha. El <strong>total del cargo</strong> y los <strong>costes indirectos (17,3 %)</strong> se calculan automáticamente.</li>
+          <li><b class="t">Revisión y descarga.</b> Repaso de los valores y descarga del PDF.</li>
+        </ol>
+        <h3>Qué se descarga <span class="chip pdf">PDF</span></h3>
+        <ul>
+          <li>El <strong>PDF oficial</strong> <span class="chip pdf">.pdf</span> de la nota de cargo, con sus 17 campos rellenos (incluidos los desplegables), conservando el membrete y las notas al pie.</li>
+        </ul>
+        <div class="aviso info"><span class="mk">ⓘ</span><div>Cálculos automáticos: <span class="formula">Total cargo interno = coste marginal + viajes y dietas</span> y <span class="formula">Costes indirectos = 17,3 % del coste marginal</span> (norma COIN). También arranca vacía, sin datos precargados.</div></div>
+      </section>
+
+      <!-- 7 -->
+      <section id="documentacion">
+        <h2><span class="n">7</span> Documentación oficial</h2>
+        <p>La pestaña <strong>«Documentación oficial»</strong> es un repositorio ordenado para consultar y descargar el material de la Campaña 2026:</p>
+        <ul>
+          <li><strong>Plantillas y modelos:</strong> la plantilla de cálculo de costes, la de desplazamiento y el modelo de nota de cargo.</li>
+          <li><strong>Guías y manuales:</strong> la guía de cumplimentación de la plantilla y las instrucciones de servicios.</li>
+          <li><strong>Instrucciones y normativa:</strong> las instrucciones SEGE y la resolución de cesión de espacios, en PDF.</li>
+          <li><strong>Referencias en el BOE:</strong> enlaces a las disposiciones legales (se abren en una pestaña nueva del navegador).</li>
+        </ul>
+        <p>Los documentos con archivo local se descargan al pulsar <strong>«Descargar»</strong>; las referencias del BOE remiten a su publicación oficial.</p>
+      </section>
+
+      <!-- 8 -->
+      <section id="sesiones">
+        <h2><span class="n">8</span> Guardar, cargar y empezar de nuevo</h2>
+        <p>En la cabecera de cada asistente, arriba a la derecha, hay tres botones: <strong>Guardar</strong>, <strong>Cargar</strong> y <strong>Nuevo</strong>. Sirven para no perder el trabajo y para reanudarlo cuando quiera.</p>
+        <h3>Guardar la sesión <span class="chip json">JSON</span></h3>
+        <p>El botón <strong>«Guardar»</strong> descarga un archivo <strong>.json</strong> <a class="que-es" data-clave="sesion_json" href="#">¿qué es?</a> con todos los datos que ha introducido. Es un fichero pequeño de texto que se queda en su ordenador. Úselo para:</p>
+        <ul>
+          <li>hacer una <strong>copia de seguridad</strong> antes de cerrar;</li>
+          <li>trabajar en <strong>varios servicios o variantes</strong> y conservar cada uno por separado;</li>
+          <li><strong>pasar el trabajo a un compañero</strong>, que solo tendrá que cargar el archivo.</li>
+        </ul>
+        <h3>Cargar una sesión</h3>
+        <p>El botón <strong>«Cargar»</strong> le pide que seleccione un archivo .json guardado previamente y <strong>restaura todos los datos</strong> tal como estaban. Así puede continuar justo donde lo dejó, incluso en otro ordenador.</p>
+        <h3>Empezar de nuevo</h3>
+        <p>El botón <strong>«Nuevo»</strong> <strong>borra todos los campos</strong> y el autoguardado, dejando el asistente limpio para empezar otra vez. Le pedirá confirmación, porque la acción no se puede deshacer.</p>
+        <div class="aviso cuidado"><span class="mk">!</span><div>Si trabaja en un <strong>ordenador compartido</strong>, pulse <strong>«Nuevo»</strong> al terminar para que no quede ningún dato guardado en el navegador.</div></div>
+      </section>
+
+      <!-- 9 -->
+      <section id="descargas">
+        <h2><span class="n">9</span> Qué archivo se descarga en cada caso</h2>
+        <p>Resumen de los documentos que produce cada herramienta y qué hacer con ellos:</p>
+        <div class="tabla-wrap">
+          <table class="tabla">
+            <thead>
+              <tr><th>Herramienta</th><th>Qué genera</th><th>Formato</th><th>Qué hacer con él</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Ensamblador de SCT</td><td>Plantilla de cálculo de costes (y la de desplazamiento, si hay viajes)</td><td><code>.xlsx</code></td><td>Revisarla y subirla a la campaña como plantilla de la variante.</td></tr>
+              <tr><td>Ensamblador de SCT</td><td>Dossier de guía con resumen y lista de comprobación</td><td>Imprimible → <code>PDF</code></td><td>Consulta interna; borrador del correo de nueva prestación.</td></tr>
+              <tr><td>Presupuesto y facturación</td><td>Oferta de prestación de servicio</td><td><code>.docx</code> (y PDF)</td><td>Firmarla y entregarla al solicitante.</td></tr>
+              <tr><td>Nota de cargo interno</td><td>Formulario oficial de nota de cargo</td><td><code>.pdf</code></td><td>Trasladar el cargo a la unidad solicitante del CSIC.</td></tr>
+              <tr><td>Cualquier asistente</td><td>Sesión de trabajo (todos sus datos)</td><td><code>.json</code></td><td>Guardarla para reanudar o compartir; se recarga con «Cargar».</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="aviso info"><span class="mk">ⓘ</span><div>Los archivos se descargan a la carpeta de descargas que tenga configurada el navegador. Sus nombres no llevan acentos ni los caracteres <span class="formula">/ \ : . ;</span>, para que sean válidos en el sistema del CSIC.</div></div>
+      </section>
+
+      <!-- 10 -->
+      <section id="privacidad">
+        <h2><span class="n">10</span> Privacidad, requisitos y consejos</h2>
+        <div class="aviso priv"><span class="mk">🔒</span><div><strong>Todo ocurre en su navegador.</strong> <a class="que-es" data-clave="privacidad" href="#">¿qué es?</a> El sitio no envía sus datos a ningún servidor: los cálculos, el autoguardado y la generación de los documentos se hacen en su propio ordenador. Funciona incluso sin conexión a internet.</div></div>
+        <h3>Requisitos</h3>
+        <ul>
+          <li>Un <strong>navegador moderno</strong> (Chrome, Edge, Firefox o Safari recientes).</li>
+          <li>No requiere instalación ni cuenta. Para abrirlo sin conexión, basta con hacer <strong>doble clic</strong> en el archivo principal.</li>
+          <li>Para abrir los archivos <code>.xlsx</code> necesitará <strong>Excel</strong> o <strong>LibreOffice Calc</strong>; los <code>.docx</code>, Word o LibreOffice Writer.</li>
+        </ul>
+        <h3>Buenas prácticas</h3>
+        <ul>
+          <li>Guarde la sesión <span class="chip json">.json</span> de vez en cuando si va a trabajar mucho rato.</li>
+          <li>No edite la estructura de los Excel generados (solo revíselos).</li>
+          <li>Recuerde que estas herramientas tienen <strong>carácter orientativo</strong>: no sustituyen a la normativa del CSIC ni a la validación por la Dirección o la Gerencia <a class="que-es" data-clave="validador" data-slug="Validacion-Direccion" href="#">¿qué es?</a> del centro.</li>
+        </ul>
+      </section>
+
+      <!-- 11 -->
+      <section id="faq">
+        <h2><span class="n">11</span> Preguntas frecuentes</h2>
+
+        <details class="faq">
+          <summary>¿Necesito conexión a internet?</summary>
+          <div class="cuerpo"><p>No para usar las herramientas: el cálculo y la generación de documentos funcionan sin conexión. Solo se necesita internet para abrir los enlaces externos al BOE de la pestaña de documentación.</p></div>
+        </details>
+
+        <details class="faq">
+          <summary>¿Dónde se guardan mis datos? ¿Son privados?</summary>
+          <div class="cuerpo"><p>En la memoria de su propio navegador (autoguardado) y, si lo descarga, en el archivo <code>.json</code> que queda en su ordenador. Nada se envía a ningún servidor. En un equipo compartido, pulse «Nuevo» al terminar.</p></div>
+        </details>
+
+        <details class="faq">
+          <summary>¿Puedo retomar el trabajo otro día o en otro ordenador?</summary>
+          <div class="cuerpo"><p>Sí. En el mismo equipo, el autoguardado conserva los datos. Para otro día u otro ordenador, use «Guardar» para descargar la sesión y «Cargar» para restaurarla.</p></div>
+        </details>
+
+        <details class="faq">
+          <summary>¿Y si mi prestación no está en el catálogo?</summary>
+          <div class="cuerpo"><p>En el Ensamblador, indique que la prestación es nueva. El dossier le preparará el borrador del correo a <strong>ayuda.servicios@csic.es</strong> con el nombre y la descripción (en castellano e inglés), la agrupación y la subagrupación.</p></div>
+        </details>
+
+        <details class="faq">
+          <summary>¿Por qué el Excel descargado ya trae fórmulas?</summary>
+          <div class="cuerpo"><p>Porque es la <strong>plantilla oficial</strong> reutilizada íntegra. El asistente escribe los datos en las celdas de entrada y conserva las fórmulas, de modo que el archivo abre correctamente en Excel y el sistema del CSIC lee los valores en las celdas que espera.</p></div>
+        </details>
+
+        <details class="faq">
+          <summary>¿Esto sustituye a la validación oficial?</summary>
+          <div class="cuerpo"><p>No. Las herramientas le ayudan a preparar los documentos correctamente, pero la prestación debe ser <strong>validada por la Dirección o la Gerencia</strong> del centro, conforme a la normativa vigente.</p></div>
+        </details>
+
+        <details class="faq">
+          <summary>He pulsado «Nuevo» por error. ¿Puedo recuperar los datos?</summary>
+          <div class="cuerpo"><p>No, «Nuevo» borra el autoguardado de forma irreversible. Por eso conviene «Guardar» la sesión en <code>.json</code> antes: si la tiene, basta con «Cargar» ese archivo.</p></div>
+        </details>
+      </section>
+
+      <p style="margin-top:26px;color:var(--tenue);font-size:13px;">¿Necesita comprender mejor algún concepto? Visite el <button class="ir-btn" data-ir="mapa">mapa conceptual →</button> o pulse cualquier enlace <a class="que-es" data-clave="que_es_link" href="#">¿qué es?</a> de esta guía.</p>
+    </main>
+
+    <!-- ===================== COLUMNA LATERAL ===================== -->
+    <aside class="lateral">
+      <div class="tarjeta">
+        <div class="cab">¿Qué es un Servicio Científico-Técnico?</div>
+        <div class="cuerpo">
+          <p>Un <strong>Servicio Científico-Técnico (SCT)</strong> es una estructura del CSIC —su unidad se denomina <strong>USCT</strong> <a class="que-es" data-clave="usct" data-slug="USCT" href="#">¿qué es?</a>— que agrupa personal, equipos e infraestructuras para <strong>prestar técnicas y servicios especializados</strong>, tanto a la propia comunidad investigadora como a entidades públicas y privadas.</p>
+
+          <h4>¿Por qué existe?</h4>
+          <p>El <strong>RD 1730/2007</strong> (art. 5.d) <a class="que-es" data-clave="rd1730" data-slug="RD-1730-2007" href="#">¿qué es?</a> habilita al CSIC a gestionar servicios e infraestructuras científico-técnicas y a cobrar por ellos. Las <strong>Instrucciones SEGE</strong> de 2017 y de 2026 <a class="que-es" data-clave="instruccion" data-slug="Instruccion-2026-CPC" href="#">¿qué es?</a> desarrollan ese mandato: crean el catálogo y fijan un modelo común para calcular costes, tarifas y precios. Así se garantiza que todos los centros cobren de forma <strong>homogénea, transparente y justificable</strong>.</p>
+
+          <h4>¿Qué funciones cumple?</h4>
+          <p>Rentabilizar equipamiento e instalaciones, ofrecer capacidades técnicas con respaldo y calidad, y repercutir su coste de manera ordenada. Para ello, cada servicio publica sus prestaciones en el <strong>catálogo (CPC)</strong> <a class="que-es" data-clave="cpc" data-slug="CPC" href="#">¿qué es?</a>.</p>
+
+          <h4>Los conceptos, en cascada</h4>
+          <ul class="cascada">
+            <li><b>USCT</b> <a class="que-es" data-clave="usct" data-slug="USCT" href="#">¿qué es?</a> — la unidad que presta los servicios.</li>
+            <li><b>Prestación</b> <a class="que-es" data-clave="prestacion" data-slug="Prestacion" href="#">¿qué es?</a> — la técnica o servicio concreto que ofrece.</li>
+            <li><b>Variante</b> <a class="que-es" data-clave="variante" data-slug="Variante" href="#">¿qué es?</a> — cada forma de ofertar esa prestación.</li>
+            <li><b>UMC</b> <a class="que-es" data-clave="umc" data-slug="UMC" href="#">¿qué es?</a> — la unidad sobre la que se calcula el coste.</li>
+            <li><b>Coste total y marginal</b> <a class="que-es" data-clave="coste_marginal" data-slug="Coste-Marginal" href="#">¿qué es?</a> — la base económica.</li>
+            <li><b>Tarifas internas</b> <a class="que-es" data-clave="tarifa_interna" data-slug="Tarifa-Uso-Interno" href="#">¿qué es?</a> — el precio para el CSIC.</li>
+            <li><b>Precios externos</b> <a class="que-es" data-clave="precio_externo" data-slug="Precio-Externo" href="#">¿qué es?</a> — el precio para terceros.</li>
+            <li><b>Nota de cargo</b> <a class="que-es" data-clave="nota_cargo" data-slug="Nota-de-Cargo" href="#">¿qué es?</a> — cómo se cobra internamente.</li>
+          </ul>
+
+          <h4>La Campaña 2026</h4>
+          <p>Cada año hay una <strong>campaña</strong> <a class="que-es" data-clave="campana" data-slug="Subir-Campana-Futura" href="#">¿qué es?</a> para registrar y actualizar las prestaciones. En 2026 va del <strong>1 de junio</strong> al <strong>1 de julio a las 15:00</strong>. El flujo es: la persona responsable rellena la plantilla → la sube a «Campaña Futura» → «Enviar al validador» → la <strong>Dirección valida</strong> <a class="que-es" data-clave="validador" data-slug="Validacion-Direccion" href="#">¿qué es?</a>.</p>
+
+          <p class="nota-leg">Síntesis orientativa basada en el RD 1730/2007, las Instrucciones SEGE de 1 de junio de 2017 y de 19 de mayo de 2026 y la Guía de cálculo de costes del SCT (2026). Para el detalle, consulte el mapa conceptual y la documentación oficial.</p>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <footer class="pie">
+    Portal del Servicio Científico-Técnico del CSIC · Campaña 2026 · Manual de uso. Las herramientas y los contenidos tienen carácter orientativo y no sustituyen a la normativa oficial ni a la validación por la Dirección o la Gerencia del centro.
+  </footer>
+
+  <!-- ===================== LÓGICA ===================== -->
+  <script>
+  (function () {
+    "use strict";
+
+    /* ---- Glosario de ayuda para los diálogos flotantes "¿qué es?" ----
+       Cada entrada: { t: título, h: explicación HTML }. Si el enlace lleva
+       data-slug, se añade un acceso a la ficha completa del mapa conceptual. */
+    var GLOSARIO = {
+      que_es_link: { t: "Los enlaces «¿qué es?»", h:
+        "<p>Son ayudas contextuales. Al pasar el ratón o pulsarlos se abre esta pequeña ventana con la explicación del concepto.</p>" +
+        "<p>Cuando el concepto tiene ficha propia, abajo aparece un enlace para <strong>verla completa en el mapa conceptual</strong>.</p>" },
+      asistente: { t: "Asistente (cuestionario por pasos)", h:
+        "<p>Una interfaz que le guía con preguntas, agrupadas en <strong>pasos</strong>. Va rellenando y avanzando; al final descarga el documento ya generado.</p>" +
+        "<p>El Ensamblador, el Presupuesto y la Nota de cargo siguen este mismo formato.</p>" },
+      hitos: { t: "Barra de pasos (hitos)", h:
+        "<p>Las etiquetas redondeadas de la parte superior del asistente. Indican en qué paso está (en rojo) y cuáles ha completado (en azul).</p>" +
+        "<p>Puede pulsar en cualquiera para <strong>saltar directamente</strong> a ese paso.</p>" },
+      formato_numero: { t: "Formato numérico español", h:
+        "<p>Los importes usan el <strong>punto para los miles</strong> y la <strong>coma para los decimales</strong>. Por ejemplo, mil doscientos treinta y cuatro euros con cincuenta y seis céntimos se escribe <span class='formula'>1.234,56</span>.</p>" },
+      autoguardado: { t: "Autoguardado en el navegador", h:
+        "<p>A medida que escribe, el asistente guarda una copia en la memoria local de su navegador (no en internet). Si cierra y vuelve a abrir, sus datos siguen ahí.</p>" +
+        "<p>Para borrarlos, use el botón <strong>«Nuevo»</strong>.</p>" },
+      sesion_json: { t: "Archivo de sesión (.json)", h:
+        "<p>Un fichero de texto pequeño que contiene <strong>todos los datos</strong> que ha introducido en un asistente.</p>" +
+        "<p>Se descarga con <strong>«Guardar»</strong> y se restaura con <strong>«Cargar»</strong>. Sirve de copia de seguridad y para compartir el trabajo.</p>" },
+      docx: { t: "Documento Word (.docx)", h:
+        "<p>Formato estándar de documento de texto (Word, LibreOffice Writer). La oferta de prestación se genera en <strong>.docx</strong> conservando el membrete y los estilos oficiales del CSIC, lista para firmar.</p>" },
+      acroform: { t: "Formulario PDF (AcroForm)", h:
+        "<p>Un PDF que incorpora <strong>campos rellenables</strong> (casillas y desplegables). La herramienta carga el PDF oficial, cumplimenta sus campos y lo vuelve a guardar, sin alterar su diseño ni sus notas al pie.</p>" },
+      privacidad: { t: "Privacidad: todo es local", h:
+        "<p>Los cálculos, el autoguardado y la generación de documentos se ejecutan <strong>en su propio navegador</strong>. El sitio no tiene servidor que reciba datos: nada de lo que escriba sale de su ordenador.</p>" },
+
+      /* --- conceptos del dominio (con ficha en el mapa) --- */
+      usct: { t: "USCT — Unidad de Servicio Científico-Técnico", h:
+        "<p>La estructura organizativa que agrupa personal, equipos e infraestructuras y es la <strong>única habilitada</strong> para ofertar prestaciones en el catálogo.</p>" +
+        "<p>Su constitución y su persona responsable requieren la aprobación de la Dirección del centro.</p>" },
+      prestacion: { t: "Prestación", h:
+        "<p>La <strong>técnica o proceso</strong> que el servicio ejecuta de forma aislada y cuyo coste puede medirse por una unidad. Es lo que el usuario ve en el catálogo.</p>" +
+        "<p>Se oferta mediante al menos una variante.</p>" },
+      variante: { t: "Variante", h:
+        "<p>Cada <strong>forma concreta de ofertar</strong> una prestación (según volumen, equipo, categoría de personal o condiciones). <strong>El coste se calcula por variante</strong>, para una UMC, y cada una tiene su propia plantilla Excel.</p>" },
+      umc: { t: "UMC — Unidad de Medida de Coste", h:
+        "<p>La unidad respecto a la cual se calcula y se factura el coste de una variante (por ejemplo, <em>muestra</em>, <em>hora</em>, <em>ensayo</em> o <em>informe</em>).</p>" +
+        "<p><strong>Todos los importes se entienden «por UMC».</strong></p>" },
+      cpc: { t: "CPC — Catálogo de Prestaciones", h:
+        "<p>El registro único y bilingüe donde se publican todas las prestaciones de los Servicios Científico-Técnicos del CSIC. Ordena la oferta y permite a los usuarios localizarla.</p>" },
+      cuenta_interna: { t: "Cuenta interna", h:
+        "<p>La cuenta contable interna del CSIC a la que se imputan ingresos y gastos del servicio. <strong>Cada servicio debe tener al menos una</strong>, imprescindible para emitir notas de cargo.</p>" },
+      catalogo: { t: "Criterios del catálogo", h:
+        "<p>Para que una prestación sea visible en el catálogo debe estar <strong>vigente</strong>, con descripción específica, una plantilla Excel por variante y <strong>validada</strong> por la Dirección o la Gerencia.</p>" },
+      nueva_prestacion: { t: "Solicitar una prestación nueva", h:
+        "<p>Si la prestación no existe en el catálogo, se solicita por correo a <strong>ayuda.servicios@csic.es</strong> indicando nombre y descripción (en castellano e inglés), agrupación y subagrupación.</p>" +
+        "<p>El dossier del Ensamblador prepara ese borrador por usted.</p>" },
+      amortizacion: { t: "Amortización", h:
+        "<p>Reparto del coste de un equipo o software a lo largo de su vida útil. Solo se imputa si el bien <strong>no está amortizado</strong>.</p>" +
+        "<p><span class='formula'>(Valor − subvención UE) ÷ años de vida útil × (tiempo por UMC ÷ horas anuales)</span>.</p>" },
+      coste_total: { t: "Coste total (por UMC)", h:
+        "<p>Suma de todos los costes imputables a una UMC (personal, equipamiento, instalación y otros), incluido el IVA no deducible y los costes indirectos. Es la base de los <strong>precios externos</strong>.</p>" },
+      coste_marginal: { t: "Coste marginal (por UMC)", h:
+        "<p>La parte del coste que <strong>solo se incurre al ejecutar</strong> la prestación (energía, fungibles, amortización por uso, personal no CSIC…). <strong>El personal del CSIC no es marginal.</strong> Es la base de la tarifa interna.</p>" },
+      tarifa_interna: { t: "Tarifas de uso interno", h:
+        "<p>El precio para el propio CSIC. Para un grupo del <strong>mismo centro</strong> coincide con el coste marginal; para <strong>otro centro</strong> del CSIC se le suma el 17,3 % de costes indirectos (norma COIN).</p>" },
+      precio_externo: { t: "Precios externos", h:
+        "<p>El precio para terceros: coste total <strong>+ 5 %</strong> para AGE, OPIs y universidades; <strong>+ 15 %</strong> para empresas y otras entidades.</p>" +
+        "<p>Si la amortización supera el 30 % del coste total, se elimina el margen.</p>" },
+      nota_cargo: { t: "Nota de cargo interno", h:
+        "<p>El documento con el que un servicio <strong>traslada a otra unidad del CSIC</strong> el coste de una prestación, más los desplazamientos y dietas asociados.</p>" },
+      costes_indirectos: { t: "Costes indirectos (17,3 %)", h:
+        "<p>Recargo que cubre los gastos generales no imputables directamente. En el ámbito interno del CSIC se aplica un <strong>17,3 %</strong> sobre el coste marginal (norma COIN).</p>" },
+      desplazamientos: { t: "Desplazamientos y dietas", h:
+        "<p>Gastos de viaje y dietas asociados a la prestación. <strong>No entran en el coste de la variante</strong>: se imputan aparte, en la nota de cargo, según la Instrucción de 19 de mayo de 2026 y el RD 462/2002.</p>" },
+      validador: { t: "Validación por la Dirección/Gerencia", h:
+        "<p>Antes de publicarse, cada prestación y su plantilla deben ser <strong>validadas por la Dirección o la Gerencia</strong> del centro. El responsable la envía al validador dentro de la campaña.</p>" },
+      campana: { t: "Campaña anual", h:
+        "<p>El periodo en que se registran y actualizan las prestaciones. En 2026 va del <strong>1 de junio</strong> al <strong>1 de julio a las 15:00</strong>. Flujo: rellenar → subir a «Campaña Futura» → «Enviar al validador» → validar.</p>" },
+      rd1730: { t: "RD 1730/2007 — Estatuto del CSIC", h:
+        "<p>La norma fundacional. En su <strong>artículo 5.d</strong> atribuye al CSIC la función de gestionar servicios e infraestructuras científico-técnicas y prestarlos a entidades públicas y privadas.</p>" },
+      instruccion: { t: "Instrucciones SEGE (2017 y 2026)", h:
+        "<p>Desarrollan el mandato del estatuto: crean el catálogo y el <strong>modelo de cálculo de costes, tarifas y precios</strong>. La de 19 de mayo de 2026 actualiza la de 2017 conforme al contrato de gestión 2023-2026.</p>" }
+    };
+
+    /* ---- enlace al mapa conceptual ---- */
+    var enIframe = (function () { try { return window.parent && window.parent !== window; } catch (e) { return false; } })();
+    function rutaMapa(slug) { return "../MAPA_CONCEPTUAL/mapa.html#nota=" + encodeURIComponent(slug); }
+    function abrirFicha(slug) {
+      if (enIframe) {
+        window.parent.postMessage({ canal: "sct-web", accion: "abrir-mapa", slug: slug }, "*");
+      } else {
+        window.open(rutaMapa(slug), "_blank", "noopener");
+      }
+    }
+
+    /* ---- conmutar a otra pestaña del sitio ---- */
+    function irAPestana(clave) {
+      if (enIframe) window.parent.postMessage({ canal: "sct-web", accion: "ir-a", clave: clave }, "*");
+    }
+
+    /* ---- panel flotante de ayuda ---- */
+    var pop = null, popTrigger = null, popFijado = false, popTimer = null;
+    function popVisible() { return !!(pop && pop.style.display === "block"); }
+    function crearPop() {
+      if (pop) return pop;
+      pop = document.createElement("div");
+      pop.className = "que-pop"; pop.setAttribute("role", "dialog"); pop.setAttribute("aria-live", "polite");
+      pop.addEventListener("mouseenter", function () { clearTimeout(popTimer); });
+      pop.addEventListener("mouseleave", function () { if (!popFijado) cerrarRetardo(); });
+      document.body.appendChild(pop);
+      document.addEventListener("click", function (ev) {
+        if (popFijado && popVisible() && !pop.contains(ev.target) && ev.target !== popTrigger) cerrarPop();
+      });
+      document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") cerrarPop(); });
+      window.addEventListener("resize", cerrarPop);
+      window.addEventListener("scroll", function () { if (popVisible() && popTrigger) posicionar(popTrigger); }, true);
+      return pop;
+    }
+    function rellenar(clave, slug) {
+      var g = GLOSARIO[clave] || null;
+      pop.innerHTML = "";
+      var tit = document.createElement("div"); tit.className = "qp-tit";
+      tit.textContent = g ? g.t : "Información";
+      pop.appendChild(tit);
+      var cu = document.createElement("div"); cu.className = "qp-ayuda";
+      cu.innerHTML = g ? g.h : "<p>Información de este concepto.</p>";
+      pop.appendChild(cu);
+      if (slug) {
+        var a = document.createElement("a");
+        a.className = "qp-link"; a.href = rutaMapa(slug);
+        a.textContent = "Ver la ficha completa en el mapa conceptual ↗";
+        a.addEventListener("click", function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirFicha(slug); cerrarPop(); });
+        pop.appendChild(a);
+      }
+    }
+    function posicionar(trigger) {
+      var r = trigger.getBoundingClientRect(), ancho = 320, margen = 12;
+      pop.style.width = ancho + "px";
+      var alto = pop.offsetHeight;
+      var left = r.left, top = r.bottom + 8;
+      var maxLeft = window.innerWidth - ancho - margen;
+      if (left > maxLeft) left = Math.max(margen, maxLeft);
+      if (left < margen) left = margen;
+      if (top + alto > window.innerHeight - margen && r.top - alto - 8 > margen) top = r.top - alto - 8;
+      pop.style.left = Math.round(left) + "px";
+      pop.style.top = Math.round(top) + "px";
+    }
+    function abrirPop(trigger, clave, slug, fijar) {
+      crearPop();
+      popTrigger = trigger;
+      rellenar(clave, slug);
+      pop.style.visibility = "hidden";
+      pop.style.display = "block";
+      posicionar(trigger);
+      pop.style.visibility = "visible";
+      if (fijar) popFijado = true;
+    }
+    function cerrarRetardo() { clearTimeout(popTimer); popTimer = setTimeout(cerrarPop, 220); }
+    function cerrarPop() { clearTimeout(popTimer); if (pop) pop.style.display = "none"; popFijado = false; popTrigger = null; }
+
+    function activarAyuda(a) {
+      var clave = a.getAttribute("data-clave");
+      var slug = a.getAttribute("data-slug") || "";
+      a.addEventListener("mouseenter", function () { if (popFijado) return; clearTimeout(popTimer); abrirPop(a, clave, slug, false); });
+      a.addEventListener("mouseleave", function () { if (!popFijado) cerrarRetardo(); });
+      a.addEventListener("click", function (ev) {
+        ev.preventDefault(); ev.stopPropagation();
+        if (popFijado && popTrigger === a) cerrarPop();
+        else abrirPop(a, clave, slug, true);
+      });
+      a.addEventListener("keydown", function (ev) {
+        if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); abrirPop(a, clave, slug, true); }
+      });
+    }
+
+    /* ---- conexión de eventos ---- */
+    document.addEventListener("DOMContentLoaded", function () {
+      Array.prototype.forEach.call(document.querySelectorAll("a.que-es[data-clave]"), function (a) {
+        a.setAttribute("tabindex", "0"); a.setAttribute("role", "button");
+        activarAyuda(a);
+      });
+      Array.prototype.forEach.call(document.querySelectorAll(".ir-btn[data-ir]"), function (b) {
+        b.addEventListener("click", function () { irAPestana(b.getAttribute("data-ir")); });
+      });
+      var imp = document.getElementById("btn-imprimir");
+      if (imp) imp.addEventListener("click", function () { window.print(); });
+    });
+  })();
+  </script>
+
+</body>
+</html>
