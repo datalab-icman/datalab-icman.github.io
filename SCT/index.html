@@ -342,6 +342,8 @@
     <div class="sct-pestanas-interior" role="tablist">
       <button type="button" id="tab-mapa" role="tab" aria-controls="panel-mapa" aria-selected="true" class="activa" onclick="activarPestana('mapa')">Mapa conceptual</button>
       <button type="button" id="tab-app" role="tab" aria-controls="panel-app" aria-selected="false" onclick="activarPestana('app')">Ensamblador de SCT</button>
+      <button type="button" id="tab-presupuesto" role="tab" aria-controls="panel-presupuesto" aria-selected="false" onclick="activarPestana('presupuesto')">Presupuesto y facturación</button>
+      <button type="button" id="tab-nota" role="tab" aria-controls="panel-nota" aria-selected="false" onclick="activarPestana('nota')">Nota de cargo interno</button>
       <button type="button" id="tab-docs" role="tab" aria-controls="panel-docs" aria-selected="false" onclick="activarPestana('docs')">Documentación oficial</button>
     </div>
   </nav>
@@ -357,6 +359,16 @@
     <!-- Panel: Ensamblador de SCT -->
     <section id="panel-app" class="sct-panel" role="tabpanel" aria-labelledby="tab-app">
       <iframe id="frame-app" src="APP/index.html" title="Ensamblador interactivo del Servicio Científico-Técnico y cálculo de costes" loading="eager"></iframe>
+    </section>
+
+    <!-- Panel: Presupuesto y facturación -->
+    <section id="panel-presupuesto" class="sct-panel" role="tabpanel" aria-labelledby="tab-presupuesto">
+      <iframe id="frame-presupuesto" src="PRESUPUESTO/index.html" title="Presupuesto y facturación: generación de la oferta de prestación de servicio del CSIC" loading="eager"></iframe>
+    </section>
+
+    <!-- Panel: Nota de cargo interno -->
+    <section id="panel-nota" class="sct-panel" role="tabpanel" aria-labelledby="tab-nota">
+      <iframe id="frame-nota" src="NOTA_CARGO/index.html" title="Nota de cargo interno: cumplimentación del formulario oficial del Servicio Científico-Técnico del CSIC" loading="eager"></iframe>
     </section>
 
     <!-- Panel: Documentación oficial -->
@@ -527,6 +539,8 @@
     var CLAVES = {
       mapa: { tab: "tab-mapa", panel: "panel-mapa" },
       app:  { tab: "tab-app",  panel: "panel-app" },
+      presupuesto: { tab: "tab-presupuesto", panel: "panel-presupuesto" },
+      nota: { tab: "tab-nota", panel: "panel-nota" },
       docs: { tab: "tab-docs", panel: "panel-docs" }
     };
 
