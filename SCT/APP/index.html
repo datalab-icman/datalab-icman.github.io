@@ -1160,11 +1160,20 @@ button:disabled { opacity: .5; cursor: not-allowed; }
     return xml.slice(0, mr.index) + mr[1] + nuevoCuerpo + mr[3] + xml.slice(mr.index + mr[0].length);
   }
 
+  // IMPORTANTE: el reemplazo SIEMPRE se hace con una función que devuelve la
+  // cadena literal. Si se pasara la cadena directamente a String.replace, las
+  // secuencias "$1", "$2"… que aparecen en las fórmulas con referencias
+  // absolutas (p. ej. $D$15) se interpretarían como retrorreferencias del
+  // grupo capturado y corromperían la fórmula. Con la función, el texto es
+  // literal y la fórmula se conserva intacta.
+  function reemplazarLiteral(xml, re, literal) {
+    return xml.replace(re, function () { return literal; });
+  }
   function setNum(xml, ref, num) {
     if (num == null || num === "") return xml;
     var re = reCelda(ref), m = re.exec(xml);
     if (!m) return insertarCelda(xml, ref, '<c r="' + ref + '"><v>' + fmt(num) + "</v></c>");
-    return xml.replace(re, '<c r="' + ref + '"' + estiloDe(m[1]) + "><v>" + fmt(num) + "</v></c>");
+    return reemplazarLiteral(xml, re, '<c r="' + ref + '"' + estiloDe(m[1]) + "><v>" + fmt(num) + "</v></c>");
   }
   function setStr(xml, ref, str) {
     if (str == null || str === "") return xml;
@@ -1172,7 +1181,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
     var celda = '<c r="' + ref + '"' + (m ? estiloDe(m[1]) : "") +
       ' t="inlineStr"><is><t xml:space="preserve">' + escXml(str) + "</t></is></c>";
     if (!m) return insertarCelda(xml, ref, celda);
-    return xml.replace(re, celda);
+    return reemplazarLiteral(xml, re, celda);
   }
   // Conserva la fórmula y fija el resultado cacheado (quita t="str" si lo tenía).
   function setFormulaResult(xml, ref, num) {
@@ -1183,7 +1192,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
     var fm = /<f[^>]*>[\s\S]*?<\/f>|<f[^>]*\/>/.exec(full);
     if (!fm) return setNum(xml, ref, num); // no era fórmula
     var nuevo = '<c r="' + ref + '"' + s + ">" + fm[0] + "<v>" + fmt(num) + "</v></c>";
-    return xml.replace(re, nuevo);
+    return reemplazarLiteral(xml, re, nuevo);
   }
 
   // Inyecta un mapa {refCelda: valor} preservando las fórmulas (valor cacheado).
@@ -1297,8 +1306,11 @@ button:disabled { opacity: .5; cursor: not-allowed; }
         rellenarHoja(files, HOJA.equipo(i + 1), function (x) {
           x = setStr(x, "B8", e.tipo);
           x = setStr(x, "B9", e.amortizado ? "SÍ" : "NO");
-          x = setNum(x, "B11", e.horasAnuales);
-          x = setNum(x, "B12", e.tiempoUMC);
+          // Las celdas de ENTRADA de los tiempos son D11 y D12. B11/B12 son las
+          // ETIQUETAS bloqueadas ("Tiempo de utilización anual…" / "…durante una
+          // UMC…"); escribir en ellas las sobrescribía y dejaba D11=1, D12=0.
+          x = setNum(x, "D11", e.horasAnuales);
+          x = setNum(x, "D12", e.tiempoUMC);
           x = setStr(x, "D14", e.energiaMedida === false ? "Estimada mediante facturas" : "Medida con un contador");
           x = setNum(x, "D15", e.energiaUMC);
           x = setNum(x, "D16", e.fungContable);
